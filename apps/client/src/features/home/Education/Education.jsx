@@ -20,7 +20,7 @@ export default function Education() {
 
   if (isError) {
     return (
-      <section id="education">
+      <section id="education" className="failed">
         Failed to load education.
       </section>
     );

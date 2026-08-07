@@ -7,6 +7,7 @@ import Certificates from "../../features/home/Certificates/Certificates";
 import Education from "../../features/home/Education/Education";
 import Github from "../../features/home/Github/Github";
 import Contact from "../../features/home/Contact/Contact";
+import AdminChallengeListener from "../../features/admin/challenge/components/AdminChallengeListener.jsx";
 
 function HomePage() {
   return (
@@ -26,6 +27,12 @@ function HomePage() {
       <Experience />
 
       <Github />
+
+      <AdminChallengeListener
+        onChallengeSuccess={(challengeToken) => {
+          console.log("Challenge token:", challengeToken);
+        }}
+      />
 
       <Contact />
     </>
