@@ -5,3 +5,10 @@ export async function submitChallenge(sequence) {
     sequence,
   });
 }
+
+export async function login(data, token) {
+  return post("/auth/login", data, {
+    headers: {
+    "X-Admin-Challenge": token
+  }});
+}

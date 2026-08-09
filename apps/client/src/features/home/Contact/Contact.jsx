@@ -1,7 +1,8 @@
-import { Section } from "../../../components/layout";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 
+import { Section } from "../../../components/layout";
+import { Spinner } from "../../../components/feedback";
 import contactSchema from "../../contact/validation/contact.schema";
 import useSendMessage from "../../contact/hooks/useSendMessage";
 import useProfile from "../../profile/hooks/useProfile";
@@ -116,7 +117,7 @@ export default function Contact() {
                   {...register("message")}
                 />
                 <Button type="submit" disabled={sendMessage.isPending}>
-                  {sendMessage.isPending ? "Sending..." : "Send Message"}
+                  {sendMessage.isPending ? <Spinner /> : "Send Message"}
                 </Button>
               </form>
             </div>
