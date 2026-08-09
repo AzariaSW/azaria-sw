@@ -1,0 +1,60 @@
+@import "../../../../../styles/theme.css";
+
+.admin-login {
+  min-height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: var(--space-6);
+
+  background: var(--color-background);
+}
+
+.admin-login__card {
+  width: min(100%, 420px);
+  padding: var(--space-8);
+
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+
+  background: var(--color-surface);
+  box-shadow: var(--shadow-lg);
+}
+
+.admin-login__header {
+  margin-bottom: var(--space-6);
+  text-align: center;
+}
+
+.admin-login__header h1 {
+  margin: 0 0 var(--space-2);
+  color: var(--color-primary);
+}
+
+.admin-login__header p {
+  margin: 0;
+  color: var(--color-text-muted);
+}
+
+.admin-login__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.admin-login__submit {
+  width: 100%;
+  margin-top: var(--space-2);
+}
+
+@media (max-width: 639px) {
+  .admin-login {
+    padding: var(--space-4);
+  }
+
+  .admin-login__card {
+    padding: var(--space-6);
+  }
+}
