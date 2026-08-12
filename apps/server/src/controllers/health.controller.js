@@ -11,11 +11,7 @@ export const CheckDatabase = asyncHandler(async (req, res) => {
   const startTime = Date.now();
 
   await checkDatabaseService();
-
-  console.log(getPagination("2", "20"));
-
-  console.log(createSlug("Smart Library Management System"));
-
+  
   res.status(HTTP_STATUS.OK).json(
     new ApiResponse(
       HTTP_STATUS.OK,

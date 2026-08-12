@@ -1,16 +1,14 @@
-import { Outlet } from "react-router-dom";
-import { Navigate, useLocation } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 
+import useAdminAuth from "../../features/admin/auth/context/useAdminAuth";
 import AdminSidebar from "./components/AdminSidebar/AdminSidebar";
 import AdminHeader from "./components/AdminHeader/AdminHeader";
-
 import "./AdminLayout.css"
 
 export default function AdminLayout() {
-  const location = useLocation();
-  const token = location.state?.token;
+  const { isAuthenticated } = useAdminAuth();
 
-  if (!token) {
+  if (!isAuthenticated) {
     return <Navigate to="/" replace />;
   }
   

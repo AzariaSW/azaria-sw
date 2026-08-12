@@ -12,13 +12,13 @@ function RootLayout() {
   return (
     <div className="root-layout">
       <Navbar onAdminTrigger={(bool) => setIsChallengeActive(bool)} />
-      <AdminChallengeListener isActive={isChallengeActive} />
 
       <Main>
         <Outlet />
       </Main>
 
       <Footer />
+      <AdminChallengeListener isActive={isChallengeActive} />
     </div>
   );
 }
