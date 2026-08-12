@@ -20,6 +20,15 @@
 
 .navbar__brand {
   flex-shrink: 0;
+  border: 0;
+  padding: 0;
+
+  background: transparent;
+
+  font: inherit;
+  color: var(--color-primary);
+
+  cursor: default;
 }
 
 .navigation {

@@ -1,0 +1,15 @@
+@import "../../styles/theme.css";
+
+.admin-layout {
+  min-height: 100vh;
+  background: var(--color-background);
+}
+
+.admin-layout__main {
+  min-height: 100vh;
+  margin-left: 240px;
+}
+
+.admin-layout__content {
+  width: 100%;
+}

@@ -35,6 +35,8 @@ export {
   AlertCircle,
   Dot,
   Info,
+  Eye,
+  EyeClosed,
 } from "lucide-react";
 export {
   FaGithub as Github,

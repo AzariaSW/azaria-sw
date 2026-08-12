@@ -1,27 +1,34 @@
 import { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 import useAdminChallenge from "../hooks/useAdminChallenge";
 
-export default function AdminChallengeListener({ onChallengeSuccess }) {
-  const [isListening, setIsListening] = useState(false);
+export default function AdminChallengeListener({ isActive }) {
   const [sequence, setSequence] = useState("");
   const sequenceRef = useRef("");
 
+  const navigate = useNavigate();
+
   const challenge = useAdminChallenge({
     onSuccess: (data) => {
-      onChallengeSuccess(data.challengeToken);
+      navigate("/admin", {
+        state: {
+          challengeToken: data.challengeToken,
+        },
+      });
     },
   });
 
   useEffect(() => {
-    if (!isListening) {
+    if (!isActive) {
       return;
     }
 
     function handleKeyDown(event) {
-      if (event.key === "Backspace"){
+      if (event.key === "Backspace") {
         sequenceRef.current = sequenceRef.current.slice(0, -1);
         setSequence(sequenceRef.current);
+        return;
       }
 
       if (event.key === "Enter") {
@@ -34,7 +41,9 @@ export default function AdminChallengeListener({ onChallengeSuccess }) {
           return;
         }
 
-        challenge.mutate(currentSequence);
+        challenge.mutate({
+          sequence: currentSequence,
+        });
         return;
       }
 
@@ -49,13 +58,9 @@ export default function AdminChallengeListener({ onChallengeSuccess }) {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [isListening, challenge]);
+  }, [isActive, challenge]);
   return (
     <>
-      <button onClick={() => setIsListening(true)}>
-        Activate Admin Challenge
-      </button>
-      <p>{isListening ? "Listening..." : "Not listening"}</p>
       <p>Sequence: {sequence}</p>
     </>
   );

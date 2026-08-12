@@ -1,24 +1,20 @@
 import { useState } from "react";
+import { Navigate, useLocation } from "react-router-dom";
 
-import AdminChallengeListener from "./challenge/components/AdminChallengeListener";
 import AdminLogin from "./auth/components/Adminlogin/AdminLogin";
 
 export default function AdminEntry() {
-  const [challengeToken, setChallengeToken] = useState(null);
-  const [loginToken, setLoginToken] = useState(null);
+  const location = useLocation();
+  const challengeToken = location.state?.challengeToken;
 
-  function handleChallengeSuccess(token) {
-    setChallengeToken(token);
-  }
+  const [loginToken, setLoginToken] = useState(null);
 
   function handleLoginSuccess(token) {
     setLoginToken(token);
   }
 
   if (!challengeToken) {
-    return (
-      <AdminChallengeListener onChallengeSuccess={handleChallengeSuccess} />
-    );
+    return <Navigate to="/" replace />;
   }
 
   if (!loginToken) {

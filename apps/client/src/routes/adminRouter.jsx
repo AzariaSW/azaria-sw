@@ -2,21 +2,22 @@ import AdminLayout from "../layouts/AdminLayout/AdminLayout";
 import AdminDashboard from "../features/admin/dashboard/AdminDashboard";
 import AdminEntry from "../features/admin/AdminEntry";
 
-const router = {
-  path: "/admin",
+const router = [
+  {
+    path: "/admin",
+    element: <AdminEntry />,
+  },
 
-  element: <AdminLayout />,
-
-  children: [
-    {
-      index: true,
-      element: <AdminEntry />,
-    },
-    {
-      path: "dashboard",
-      element: <AdminDashboard />,
-    },
-  ],
-};
+  {
+    path: "/admin/dashboard",
+    element: <AdminLayout />,
+    children: [
+      {
+        index: true,
+        element: <AdminDashboard />,
+      },
+    ],
+  },
+];
 
 export default router;
