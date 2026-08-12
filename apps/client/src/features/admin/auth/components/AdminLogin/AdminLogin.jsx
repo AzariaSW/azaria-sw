@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useForm } from "react-hook-form"
+import { useNavigate } from "react-router-dom";;
 
 import useAdminLogin from "../../hooks/useAdminLogin";
 import { Button, Input } from "../../../../../components/common";
@@ -7,7 +8,9 @@ import { Spinner } from "../../../../../components/feedback";
 import loginSchema from "../../validation/adminLogin.schema";
 import "./AdminLogin.css";
 
-export default function AdminLogin({ challengeToken, onLoginSuccess }) {
+export default function AdminLogin({ challengeToken }) {
+  const navigate = useNavigate();
+  
   const {
     register,
     handleSubmit,
@@ -23,7 +26,11 @@ export default function AdminLogin({ challengeToken, onLoginSuccess }) {
 
   const login = useAdminLogin({
     onSuccess: (data) => {
-      onLoginSuccess(data.token);
+      navigate("/admin/dashboard", {
+        state: {
+          token: data.token,
+        },
+      });
     },
   });
 
