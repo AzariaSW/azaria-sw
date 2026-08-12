@@ -49,6 +49,8 @@ export default function AdminSidebar() {
         <small>Admin</small>
       </div>
 
+      <div className="admin-sidebar__breakline"/>
+
       <nav className="admin-sidebar__nav">
         {navigation.map((item) => (
           <NavLink

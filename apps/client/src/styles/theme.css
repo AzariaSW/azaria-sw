@@ -230,6 +230,11 @@
   --ease-out: ease-out;
 
   --ease-in-out: ease-in-out;
+
+  
+  --admin-sidebar-width: 240px;
+
+  --admin-mobile-nav-height: 64px;
 }
 
 /* ====================   BREAKPOINTS (Documentation)======================== */

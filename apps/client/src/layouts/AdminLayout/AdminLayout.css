@@ -6,10 +6,23 @@
 }
 
 .admin-layout__main {
-  min-height: 100vh;
-  margin-left: 240px;
+  min-height: 100dvh;
+  margin-left: var(--admin-sidebar-width);
 }
 
 .admin-layout__content {
   width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+@media (max-width: 639px) {
+
+  .admin-layout__main {
+    min-height: 100dvh;
+
+    margin-left: 0;
+    padding-top: var(--admin-mobile-nav-height);
+  }
+
 }

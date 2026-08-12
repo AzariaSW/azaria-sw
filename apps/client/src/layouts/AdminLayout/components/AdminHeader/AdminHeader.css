@@ -5,11 +5,13 @@
 }
 
 .admin-header {
+  width: 100%;
   height: clamp(56px, 5vw, 64px);
 
   display: flex;
   align-items: center;
 
+  box-sizing: border-box;
   padding: 0 var(--layout-padding);
   border-bottom: 1px solid var(--color-border);
   background: var(--color-surface);
@@ -19,13 +21,27 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex: 1;
-
+  
+  width: 100%;
+  gap: var(--space-4);
   font-size: var(--font-size-sm);
   color: var(--color-text-muted);
 }
 
 .admin-header__label-owner {
-  color: var(--color-primary)
+  color: var(--color-primary);
+}
+
+@media (max-width: 639px) {
+
+  .admin-header {
+    padding: 0 var(--space-4);
+  }
+
+
+  .admin-header__label {
+    gap: var(--space-3);
+    font-size: var(--font-size-xs);
+  }
 
 }
