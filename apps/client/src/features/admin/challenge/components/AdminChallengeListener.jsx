@@ -31,7 +31,6 @@ export default function AdminChallengeListener({ isActive }) {
 
       if (event.key === "Enter") {
         const currentSequence = sequenceRef.current;
-
         sequenceRef.current = "";
 
         if (!currentSequence) {

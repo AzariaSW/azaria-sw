@@ -231,8 +231,8 @@
 
   --ease-in-out: ease-in-out;
 
-  
-  --admin-sidebar-width: 240px;
+  /* Component Size*/
+  --admin-sidebar-width: 260px;
 
   --admin-mobile-nav-height: 64px;
 }
@@ -240,7 +240,8 @@
 /* ====================   BREAKPOINTS (Documentation)======================== */
 
 /*
-  Mobile: 0px–639px
+` Small Mobile: 0px-479px
+  Mobile: 450px–639px
   Tablet: 640px–1023px
   Laptop: 1024px–1279px
   Desktop: 1280px–1535px

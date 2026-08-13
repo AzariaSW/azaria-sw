@@ -1,0 +1,78 @@
+@import "../../../styles/theme.css";
+
+.admin-profile {
+  width: 100%;
+  max-width: var(--layout-max-width);
+  margin: 0 auto;
+  padding: var(--space-8) var(--layout-padding);
+}
+
+.admin-profile__header {
+  margin-bottom: var(--space-8);
+}
+
+.admin-profile__header h1 {
+  margin: 0 0 var(--space-2);
+}
+
+.admin-profile__header p {
+  margin: 0;
+  color: var(--color-text-muted);
+}
+
+.admin-profile__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.admin-profile__section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.admin-profile__section-header h2 {
+  margin: 0 0 var(--space-2);
+}
+
+.admin-profile__section-header p {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+
+.admin-profile__fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.admin-profile__fields--two-column {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-5);
+}
+
+.admin-profile__actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+@media (max-width: 639px) {
+  .admin-profile {
+    padding: var(--space-6) var(--layout-padding);
+  }
+
+  .admin-profile__fields--two-column {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-profile__actions {
+    justify-content: stretch;
+  }
+
+  .admin-profile__actions button {
+    width: 100%;
+  }
+}
