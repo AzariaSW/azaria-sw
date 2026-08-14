@@ -1,5 +1,7 @@
 import { NavLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
+import useAdminAuth from "../../../../features/admin/auth/context/useAdminAuth";
 import "./AdminSidebar.css";
 
 const navigation = [
@@ -42,6 +44,15 @@ const navigation = [
 ];
 
 export default function AdminSidebar() {
+  const { logout } = useAdminAuth();
+  const navigate = useNavigate();
+
+  function Logout() {
+    logout();
+    navigate("/", {
+      replace: true,
+    });
+  }
   return (
     <aside className="admin-sidebar">
       <div className="admin-sidebar__brand">
@@ -49,7 +60,7 @@ export default function AdminSidebar() {
         <small>Admin</small>
       </div>
 
-      <div className="admin-sidebar__breakline"/>
+      <div className="admin-sidebar__breakline" />
 
       <nav className="admin-sidebar__nav">
         {navigation.map((item) => (
@@ -68,7 +79,7 @@ export default function AdminSidebar() {
       </nav>
 
       <div className="admin-sidebar__footer">
-        <button type="button">Logout</button>
+        <button type="button" onClick={Logout}>Logout</button>
       </div>
     </aside>
   );
