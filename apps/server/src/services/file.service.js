@@ -31,13 +31,11 @@ export async function deleteFile(filePath) {
   }
 
   try {
-    const absolutePath = path.resolve(
-      process.cwd(),
-      filePath.startsWith("/") ? filePath.slice(1) : filePath,
-    );
-    
-    await fs.unlink(absolutePath);
+    const absolutePath = path.isAbsolute(filePath)
+      ? filePath
+      : path.resolve(process.cwd(), filePath);
 
+    await fs.unlink(absolutePath);
   } catch (error) {
     if (error.code !== "ENOENT") {
       throw error;
@@ -52,7 +50,16 @@ export async function createDirectory(directory) {
 }
 
 export async function moveFile(oldPath, newPath) {
-  await fs.rename(oldPath, newPath);
+  const absoluteOldPath = path.isAbsolute(oldPath)
+    ? oldPath
+    : path.resolve(process.cwd(), oldPath);
+
+  const absoluteNewPath = path.isAbsolute(newPath)
+    ? newPath
+    : path.resolve(process.cwd(), newPath);
+
+  await fs.rename(absoluteOldPath, absoluteNewPath);
+
   return true;
 }
 

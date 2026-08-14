@@ -4,7 +4,7 @@ import path from "path";
 import crypto from "crypto";
 
 import ApiError from "../utils/ApiError.js";
-
+import parseJsonField from "../utils/parseJsonField.js";
 import { HTTP_STATUS } from "../constants/httpStatus.js";
 
 import { UPLOAD } from "../config/upload.config.js";
@@ -72,8 +72,8 @@ function fileFilter(req, file, cb) {
       allowedTypes = UPLOAD.DOCUMENT_TYPES;
       allowedExtensions = UPLOAD.DOCUMENT_EXTENSIONS;
       break;
-    
-      case "images":
+
+    case "images":
       allowedTypes = UPLOAD.IMAGE_TYPES;
       allowedExtensions = UPLOAD.IMAGE_EXTENSIONS;
       break;
@@ -112,34 +112,36 @@ export const uploader = createUploader();
 export function handleUpload(upload) {
   return (req, res, next) => {
     upload(req, res, function (error) {
-      if (!error) {
-        return next();
-      }
+      if (error) {
+        if (error instanceof multer.MulterError) {
+          switch (error.code) {
+            case "LIMIT_FILE_SIZE":
+              return next(
+                new ApiError(
+                  HTTP_STATUS.BAD_REQUEST,
+                  "File exceeds maximum allowed size.",
+                ),
+              );
 
-      if (error instanceof multer.MulterError) {
-        switch (error.code) {
-          case "LIMIT_FILE_SIZE":
-            return next(
-              new ApiError(
-                HTTP_STATUS.BAD_REQUEST,
-                "File exceeds maximum allowed size.",
-              ),
-            );
+            case "LIMIT_UNEXPECTED_FILE":
+              return next(
+                new ApiError(
+                  HTTP_STATUS.BAD_REQUEST,
+                  "Unexpected uploaded file.",
+                ),
+              );
 
-          case "LIMIT_UNEXPECTED_FILE":
-            return next(
-              new ApiError(
-                HTTP_STATUS.BAD_REQUEST,
-                "Unexpected uploaded file.",
-              ),
-            );
-
-          default:
-            return next(new ApiError(HTTP_STATUS.BAD_REQUEST, error.message));
+            default:
+              return next(new ApiError(HTTP_STATUS.BAD_REQUEST, error.message));
+          }
         }
-      }
 
-      next(error);
+        return next(error);
+      }
+      req.body.deletedImages = parseJsonField(req.body.deletedImages);
+      req.body.imageOrder = parseJsonField(req.body.imageOrder);
+
+      next();
     });
   };
 }

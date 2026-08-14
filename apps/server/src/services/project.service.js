@@ -147,10 +147,7 @@ export async function updateProject(data, projectId, files) {
       UPLOAD.DESTINATIONS.PROJECTS,
       projectId,
     );
-
     await createDirectory(projectDirectory);
-
-
 
     for (const file of files) {
       const destination = path.join(projectDirectory, file.filename);
@@ -160,10 +157,7 @@ export async function updateProject(data, projectId, files) {
       movedFiles.push(destination);
     }
 
-    
-    
     const project = await prisma.$transaction(async (tx) => {
-      
       if (deletedImages.length > 0) {
         await tx.projectImage.deleteMany({
           where: {
@@ -174,7 +168,6 @@ export async function updateProject(data, projectId, files) {
         });
       }
 
-      
       const lastImage = await tx.projectImage.findFirst({
         where: {
           projectId,
@@ -187,7 +180,6 @@ export async function updateProject(data, projectId, files) {
 
       let nextOrder = lastImage ? lastImage.order + 1 : 1;
 
-      
       if (files.length > 0) {
         await tx.projectImage.createMany({
           data: files.map((file) => ({
@@ -200,7 +192,6 @@ export async function updateProject(data, projectId, files) {
         });
       }
 
-      
       if (imageOrder.length > 0) {
         await Promise.all(
           imageOrder.map((image) =>
@@ -217,7 +208,6 @@ export async function updateProject(data, projectId, files) {
         );
       }
 
-    
       await tx.project.update({
         where: {
           id: projectId,
@@ -235,7 +225,6 @@ export async function updateProject(data, projectId, files) {
       });
     });
 
-  
     const imagesToDelete = currentProject.images.filter((image) =>
       deletedImages.includes(image.id),
     );
@@ -251,7 +240,9 @@ export async function updateProject(data, projectId, files) {
     }
 
     for (const file of files) {
-      await deleteFile(file.path);
+      if (!movedFiles.includes(path.join(projectDirectory, file.filename))) {
+        await deleteFile(file.path);
+      }
     }
 
     throw error;

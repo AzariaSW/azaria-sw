@@ -7,13 +7,13 @@ export const projectSchema = z.object({
 
     description: z.string().max(1000),
 
-    githubUrl: z.string().url().optional(),
+    githubUrl: z.string().url().or(z.literal("")).optional(),
 
-    liveUrl: z.string().url().optional(),
+    liveUrl: z.string().url().or(z.literal("")).optional(),
 
     imageUrl: z.string().url().optional(),
 
-    featured: z.boolean().optional(),
+    featured: z.coerce.boolean().optional(),
 
     deletedImages: z.array(z.string().uuid()).optional(),
 
@@ -24,7 +24,8 @@ export const projectSchema = z.object({
 
           order: z.number().int().nonnegative(),
         }),
-      ).optional(),
+      )
+      .optional(),
   }),
 
   params: z.object({}),
@@ -38,13 +39,13 @@ export const updateProjectSchema = z.object({
 
     description: z.string().max(1000).optional(),
 
-    githubUrl: z.string().url().optional(),
+    githubUrl: z.string().url().or(z.literal("")).optional(),
 
-    liveUrl: z.string().url().optional(),
+    liveUrl: z.string().url().or(z.literal("")).optional(),
 
     imageUrl: z.string().url().optional(),
 
-    featured: z.boolean().optional(),
+    featured: z.coerce.boolean().optional(),
 
     deletedImages: z.array(z.string().uuid()).optional(),
 
