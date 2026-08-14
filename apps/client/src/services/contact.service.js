@@ -12,10 +12,10 @@ export async function sendContactMessage(data) {
   return post("/messages", data);
 }
 
-export async function updateMessage(id) {
+export async function markAsRead(id) {
   return patch(`/messages/${id}`);
 }
 
-export async function removeProfile(id) {
+export async function deleteMessage(id) {
   return remove(`/messages/${id}`);
 }
