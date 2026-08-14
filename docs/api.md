@@ -122,7 +122,7 @@ Many collection endpoints support pagination, searching, filtering, and sorting.
 | Parameter | Description                                             |
 | --------- | ------------------------------------------------------- |
 | `page`    | Page number (default: `1`)                              |
-| `limit`   | Number of items per page (default: `10`, maximum: `50`) |
+| `limit`   | Number of items per page (default: `30`, maximum: `50`) |
 | `search`  | Case-insensitive search                                 |
 | `sort`    | Field used for sorting                                  |
 | `order`   | `asc` or `desc`                                         |

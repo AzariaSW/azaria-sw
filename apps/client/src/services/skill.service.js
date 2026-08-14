@@ -1,5 +1,4 @@
 import { get, put, post, remove } from "../api/request";
-import toFormData from "../utils/formData";
 
 export function getSkills() {
   return get("/skills");
@@ -13,14 +12,14 @@ export function getSkillCategories() {
   return get("skills/categories");
 }
 
-export async function createSKill(data) {
-  return post("/skills", toFormData(data));
+export async function createSkill(data) {
+  return post("/skills", data);
 }
 
-export async function updateSKill(id, data) {
-  return put(`/skills/${id}`, toFormData(data));
+export async function updateSkill(id, data) {
+  return put(`/skills/${id}`, data);
 }
 
-export async function removeSKill(id) {
+export async function removeSkill(id) {
   return remove(`/skills/${id}`);
 }

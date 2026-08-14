@@ -41,6 +41,10 @@
 
 .contact__item h4 {
   margin: 0;
+  color: var(--color-text);
+}
+
+.location h4{
   color: var(--color-primary);
 }
 

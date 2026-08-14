@@ -24,7 +24,7 @@ export async function getAllSkills(query) {
   }
 
   return queryBuilder({
-    model: prisma.Skill,
+    model: prisma.skill,
 
     query,
 

@@ -77,7 +77,7 @@ export default function Contact() {
                 <a href={`https://t.me/${telegram}`}>{telegram}</a>
               </div>
 
-              <div className="contact__item">
+              <div className="contact__item location">
                 <h4>Location</h4>
 
                 <p>{location}</p>
