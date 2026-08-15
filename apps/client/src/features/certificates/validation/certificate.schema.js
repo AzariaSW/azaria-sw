@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const experienceSchema = z.object({
+const certificateSchema = z.object({
   name: z
     .string()
     .min(1, "name is required.")
@@ -16,4 +16,4 @@ const experienceSchema = z.object({
   credentialUrl: z.url().optional(),
 });
 
-export default experienceSchema;
+export default certificateSchema;
