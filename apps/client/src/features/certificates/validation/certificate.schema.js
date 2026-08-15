@@ -11,8 +11,7 @@ const experienceSchema = z.object({
     .min(1, "issuer name is required.")
     .max(100, "issuer name must be 100 characters or less."),
 
-  //TODO: configure the date formate properly
-  issueDate: z.date(),
+  issueDate: z.coerce.date("issue date is required"),
 
   credentialUrl: z.url().optional(),
 });

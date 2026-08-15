@@ -19,6 +19,7 @@
 
 .admin-skills__header p {
   margin: 0.35rem 0 0;
+  color: var(--color-text-muted);
 }
 
 .admin-skills__toolbar {

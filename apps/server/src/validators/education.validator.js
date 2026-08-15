@@ -1,6 +1,5 @@
 import { z } from "zod";
 import id from "./id.validator.js";
-import toDate from "../utils/dateConverter.js";
 
 export const educationSchema = z.object({
   body: z.object({
@@ -10,15 +9,9 @@ export const educationSchema = z.object({
 
     field: z.string().max(100),
 
-    startDate: z.preprocess(
-      (value) => toDate(value),
-      z.date()
-    ),
+    startDate: z.coerce.date(),
 
-    endDate: z.preprocess(
-      (value) => value ? toDate(value) : undefined,
-      z.date().optional()
-    ),
+    endDate:z.coerce.date().optional(),
 
   }),
 
@@ -35,15 +28,9 @@ export const updateEducationSchema = z.object({
 
     field: z.string().max(100).optional(),
 
-    startDate: z.preprocess(
-      (value) => toDate(value),
-      z.date()
-    ),
+    startDate: z.coerce.date().optional(),
 
-    endDate: z.preprocess(
-      (value) => value ? toDate(value) : undefined,
-      z.date().optional()
-    ),
+    endDate: z.coerce.date().optional(),
 
   }),
 

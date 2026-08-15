@@ -16,10 +16,12 @@ const experienceSchema = z.object({
     .max(1000, "description must be 1000 characters or less.")
     .optional(),
 
-  //TODO: configure the date formate properly
-  startDate: z.date(),
+  startDate: z.coerce.date("start date is required"),
 
-  endDate: z.date().optional(),
+  endDate: z
+  .string()
+  .optional()
+  .transform((value) => (value ? new Date(value) : undefined)),
 });
 
 export default experienceSchema;

@@ -1,5 +1,4 @@
 import { get, put, post, remove } from "../api/request";
-import toFormData from "../utils/formData";
 
 export function getExperiences() {
   return get("/experiences");
@@ -14,11 +13,11 @@ export function getExperienceRoles() {
 }
 
 export async function createExperience(data) {
-  return post("/experiences", toFormData(data));
+  return post("/experiences", data);
 }
 
 export async function updateExperience(id, data) {
-  return put(`/experiences/${id}`, toFormData(data));
+  return put(`/experiences/${id}`, data);
 }
 
 export async function removeExperience(id) {

@@ -12,11 +12,13 @@ export default function validate(schema) {
     });
 
     if (!result.success) {
+      console.log("VALIDATION ERROR:", result.error.flatten());
+      console.log("REQUEST BODY:", req.body);
       return next(
         new ApiError(
           HTTP_STATUS.BAD_REQUEST,
 
-          "Validation failed",
+          "VALIDATION ERROR:". result.error.flatten(),
 
           result.error.errors,
         ),

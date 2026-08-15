@@ -1,6 +1,5 @@
 import { z } from "zod";
 import id from "./id.validator.js";
-import toDate from "../utils/dateConverter.js";
 
 export const experienceSchema = z.object({
   body: z.object({
@@ -10,15 +9,9 @@ export const experienceSchema = z.object({
 
     description: z.string().max(1000),
 
-    startDate: z.preprocess(
-      (value) => toDate(value),
-      z.date()
-    ),
+    startDate: z.coerce.date(),
 
-    endDate: z.preprocess(
-      (value) => value ? toDate(value) : undefined,
-      z.date().optional()
-    ),
+    endDate: z.coerce.date().optional(),
 
   }),
 
@@ -35,15 +28,9 @@ export const updateExperienceSchema = z.object({
 
     description: z.string().max(1000).optional(),
 
-    startDate: z.preprocess(
-      (value) => value ? toDate(value) : undefined,
-      z.date().optional()
-    ),
+    startDate: z.coerce.date().optional(),
 
-    endDate: z.preprocess(
-      (value) => value ? toDate(value) : undefined,
-      z.date().optional()
-    ),
+    endDate: z.coerce.date().optional(),
 
   }),
 

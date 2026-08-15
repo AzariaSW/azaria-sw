@@ -1,6 +1,5 @@
 import { z } from "zod";
 import id from "./id.validator.js";
-import toDate from "../utils/dateConverter.js";
 
 export const certificateSchema = z.object({
   body: z.object({
@@ -8,10 +7,7 @@ export const certificateSchema = z.object({
 
     issuer: z.string().max(100),
 
-    issueDate: z.preprocess(
-      (value) => value ? toDate(value) : undefined,
-      z.date()
-    ),
+    issueDate: z.coerce.date(),
 
     image: z.url().optional(),
 
@@ -30,10 +26,7 @@ export const updateCertificateSchema = z.object({
 
     issuer: z.string().max(100).optional(),
 
-    issueDate: z.preprocess(
-      (value) => value ? toDate(value) : undefined,
-      z.date().optional()
-    ),
+    issueDate: z.coerce.date().optional(),
 
     image: z.url().optional(),
 
