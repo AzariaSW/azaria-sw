@@ -1,8 +1,9 @@
 import { get, put, post, remove } from "../api/request";
-import toFormData from "../utils/formData";
 
-export function getEducations() {
-  return get("/education");
+export function getEducations(params = {}) {
+  return get("/education", {
+    params,
+  });
 }
 
 export function getEducation(id) {
@@ -10,11 +11,11 @@ export function getEducation(id) {
 }
 
 export async function createEducation(data) {
-  return post("/education", toFormData(data));
+  return post("/education", data);
 }
 
 export async function updateEducation(id, data) {
-  return put(`/education/${id}`, toFormData(data));
+  return put(`/education/${id}`, data);
 }
 
 export async function removeEducation(id) {

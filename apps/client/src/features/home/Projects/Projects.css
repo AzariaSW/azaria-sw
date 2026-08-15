@@ -67,6 +67,10 @@
   flex: 1;
 }
 
+.project_button:hover{
+  color: var(--color-bg);
+}
+
 @media (max-width: 639px) {
   .projects {
     grid-template-columns: 1fr;

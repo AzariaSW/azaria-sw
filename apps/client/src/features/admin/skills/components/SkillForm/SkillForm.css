@@ -1,5 +1,7 @@
 .skill-form {
-  margin: var(--space-8);
+  width: 100%;
+  max-width: var(--layout-content-width);
+  margin: var(--space-6) auto var(--space-8);
 }
 
 .skill-form__form {

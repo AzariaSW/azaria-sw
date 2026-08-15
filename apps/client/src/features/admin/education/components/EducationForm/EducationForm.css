@@ -1,0 +1,76 @@
+.education-form {
+  width: 100%;
+  max-width: var(--layout-content-width);
+  margin: 0 auto var(--space-8);
+}
+
+.education-form__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.education-form__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+
+  padding-bottom: var(--space-4);
+
+  border-bottom: var(--border-width) var(--border-style) var(--border-color);
+}
+
+.education-form__header h2 {
+  margin: 0;
+
+  color: var(--color-heading);
+
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-semibold);
+}
+
+.education-form__header p {
+  margin: var(--space-2) 0 0;
+
+  color: var(--color-text-muted);
+
+  font-size: var(--font-size-sm);
+  line-height: 1.5;
+}
+
+.education-form__fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.education-form__dates {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+.education-form__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+
+  padding-top: var(--space-4);
+
+  border-top: var(--border-width) var(--border-style) var(--border-color);
+}
+
+@media (max-width: 639px) {
+  .education-form__dates {
+    grid-template-columns: 1fr;
+  }
+
+  .education-form__actions {
+    flex-direction: column-reverse;
+  }
+
+  .education-form__actions button {
+    width: 100%;
+  }
+}

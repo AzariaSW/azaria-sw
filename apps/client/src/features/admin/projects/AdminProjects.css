@@ -108,6 +108,8 @@
 
   line-height: 1.6;
 
+  max-width: 100ch;
+  
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;

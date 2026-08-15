@@ -78,6 +78,7 @@ export default function Projects() {
                         href={project.liveUrl}
                         target="_blank"
                         rel="noopener noreferrer"
+                        className="project_button"
                       >
                         Live Demo
                       </Button>

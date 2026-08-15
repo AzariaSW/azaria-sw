@@ -13,14 +13,13 @@ const educationSchema = z.object({
 
   field: z
     .string()
-    .min(1, "field is required.")
     .max(100, "field must be 100 characters or less.")
     .optional(),
 
   startDate: z.coerce.date("start date is required"),
 
-  endDate: z.coerce
-    .date()
+  endDate: z
+    .string()
     .optional()
     .transform((value) => (value ? new Date(value) : undefined)),
 });

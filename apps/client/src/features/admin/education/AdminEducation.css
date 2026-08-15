@@ -1,0 +1,144 @@
+.admin-education {
+  width: 100%;
+  max-width: var(--layout-max-width);
+  margin: 0 auto;
+  padding: var(--layout-padding);
+}
+
+.admin-education__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-6);
+
+  margin-bottom: var(--space-8);
+}
+
+.admin-education__header h1 {
+  margin: 0;
+
+  color: var(--color-heading);
+
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+}
+
+.admin-education__header p {
+  margin: var(--space-2) 0 0;
+
+  color: var(--color-text-muted);
+
+  font-size: var(--font-size-md);
+  line-height: 1.5;
+}
+
+.admin-education__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.admin-education__card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-6);
+
+  padding: var(--space-6);
+}
+
+.admin-education__info {
+  min-width: 0;
+}
+
+.admin-education__info h2 {
+  margin: 0;
+
+  color: var(--color-heading);
+
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+}
+
+.admin-education__info h3 {
+  margin: var(--space-2) 0 0;
+
+  color: var(--color-primary);
+
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-medium);
+}
+
+.admin-education__field {
+  margin: var(--space-2) 0 0;
+
+  color: var(--color-text-muted);
+
+  font-size: var(--font-size-md);
+}
+
+.admin-education__dates {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+
+  margin-top: var(--space-4);
+
+  color: var(--color-text-muted);
+
+  font-family: var(--font-code);
+  font-size: var(--font-size-sm);
+}
+
+.admin-education__actions {
+  display: flex;
+  flex-shrink: 0;
+  gap: var(--space-3);
+}
+
+.admin-education__pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+
+  margin-top: var(--space-8);
+}
+
+.admin-education__pagination span {
+  min-width: 100px;
+
+  color: var(--color-text-muted);
+
+  font-size: var(--font-size-sm);
+  text-align: center;
+}
+
+@media (max-width: 639px) {
+  .admin-education__header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .admin-education__header button {
+    width: 100%;
+  }
+
+  .admin-education__card {
+    align-items: stretch;
+    flex-direction: column;
+    padding: var(--space-4);
+  }
+
+  .admin-education__actions {
+    width: 100%;
+  }
+
+  .admin-education__actions button {
+    flex: 1;
+  }
+
+  .admin-education__pagination {
+    gap: var(--space-2);
+  }
+}
