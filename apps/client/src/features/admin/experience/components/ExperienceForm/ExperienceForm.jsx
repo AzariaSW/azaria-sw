@@ -60,7 +60,6 @@ export default function ExperienceForm({ experience = null, onClose }) {
       endDate: data.endDate ? new Date(data.endDate).toISOString() : undefined,
     };
 
-    console.log("UPDATE DATA:", experienceData);
     if (isEditing) {
       updateExperience.mutate(
         {

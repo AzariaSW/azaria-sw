@@ -123,10 +123,7 @@ export default function AdminExperience() {
                     <Button
                       type="button"
                       variant="secondary"
-                      onClick={() => {
-                        handleEdit(experience);
-                        console.log("EDITING EXPERIENCE:", experience);
-                      }}
+                      onClick={() => handleEdit(experience)}
                     >
                       Edit
                     </Button>
