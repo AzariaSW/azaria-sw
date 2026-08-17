@@ -296,6 +296,10 @@
   min-width: 0;
 }
 
+.admin-github__activity-content time{
+  color: var(--color-text-muted);
+}
+
 .admin-github__activity-title {
   margin: 0;
   line-height: 1.5;

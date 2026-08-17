@@ -239,7 +239,7 @@ export default function AdminGithub() {
                     <div className="admin-github__activity-content">
                       <p>{formatGithubEvent(event.type)}</p>
 
-                      {event.repo?.name && <span>{event.repo.name}</span>}
+                      {event.repo?.name && <span>{event.repo.name} <br/></span>}
 
                       {event.created_at && (
                         <time>{formatRelativeTime(event.created_at)}</time>
