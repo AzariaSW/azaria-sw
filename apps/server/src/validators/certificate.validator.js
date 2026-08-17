@@ -11,8 +11,7 @@ export const certificateSchema = z.object({
 
     image: z.url().optional(),
 
-    credentialUrl: z.url().optional(),
-
+    credentialUrl: z.url().or(z.literal("")).optional(),
   }),
 
   params: z.object({}),
@@ -30,8 +29,7 @@ export const updateCertificateSchema = z.object({
 
     image: z.url().optional(),
 
-    credentialUrl: z.url().optional(),
-
+    credentialUrl: z.url().or(z.literal("")).optional(),
   }),
 
   params: id.shape.params,
@@ -39,4 +37,4 @@ export const updateCertificateSchema = z.object({
   query: z.object({}),
 });
 
-export const idSchema=id;
+export const idSchema = id;

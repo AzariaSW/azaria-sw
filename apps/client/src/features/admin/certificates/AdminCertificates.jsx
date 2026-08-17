@@ -2,12 +2,9 @@ import { useState } from "react";
 
 import useCertificates from "../../../features/certificates/hooks/useCertificates";
 import useDeleteCertificate from "../../../features/certificates/hooks/useDeleteCertificate";
-
 import { Button, Card, ImageCarousel } from "../../../components/common";
 import { Skeleton } from "../../../components/feedback";
 import CertificateForm from "./components/CertificateForm/CertificateForm";
-import { getAsset } from "../../../utils/getAsset";
-
 import "./AdminCertificates.css";
 
 const LIMIT = 10;
@@ -121,7 +118,10 @@ export default function AdminCertificates() {
               <article className="admin-certificates__card">
                 {certificate.image && (
                   <div className="admin-certificates__image">
-                  <ImageCarousel image={certificate.image} alt={certificate.name}/>
+                    <ImageCarousel
+                      image={certificate.image}
+                      alt={certificate.name}
+                    />
                   </div>
                 )}
 

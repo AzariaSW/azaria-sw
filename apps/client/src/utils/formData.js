@@ -10,6 +10,11 @@ export default function toFormData(data) {
       formData.append(key, value);
       return;
     }
+    
+    if (value instanceof Date) {
+      formData.append(key, value.toISOString().split("T")[0]);
+      return;
+    }
 
     if (Array.isArray(value)) {
       if (value.every((item) => item instanceof File)) {
@@ -32,6 +37,7 @@ export default function toFormData(data) {
       formData.append(key, JSON.stringify(value));
       return;
     }
+
 
     formData.append(key, value);
   });

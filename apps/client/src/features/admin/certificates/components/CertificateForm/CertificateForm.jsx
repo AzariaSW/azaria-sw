@@ -4,14 +4,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { X } from "../../../../../lib/icons";
 import Icon from "../../../../../lib/icons/Icon";
-
 import { Button, Card, Input } from "../../../../../components/common";
-
+import { Spinner } from "../../../../../components/feedback";
 import useCreateCertificate from "../../../../certificates/hooks/useCreateCertificate";
 import useUpdateCertificate from "../../../../certificates/hooks/useUpdateCertificate";
 import certificateSchema from "../../../../certificates/validation/certificate.schema";
-import CertificateImageManager from "./CertificateImageManager";
-
+import CertificateImageManager from "../CertificateImageManager/CertificateImageManager";
 import "./CertificateForm.css";
 
 export default function CertificateForm({ certificate = null, onClose }) {
@@ -163,11 +161,13 @@ export default function CertificateForm({ certificate = null, onClose }) {
           </Button>
 
           <Button type="submit" disabled={isSubmitting}>
-            {isSubmitting
-              ? "Saving..."
-              : isEditing
-                ? "Save Changes"
-                : "Create Certificate"}
+            {isSubmitting ? (
+              <Spinner />
+            ) : isEditing ? (
+              "Save Changes"
+            ) : (
+              "Create Certificate"
+            )}
           </Button>
         </footer>
       </form>

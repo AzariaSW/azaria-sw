@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
-import {X} from "../../../../../lib/icons";
+import { X } from "../../../../../lib/icons";
 import Icon from "../../../../../lib/icons/Icon";
 import { getAsset } from "../../../../../utils/getAsset";
 
@@ -27,7 +27,7 @@ function NewImagePreview({ file, onRemove }) {
         onClick={onRemove}
         aria-label="Remove selected image"
       >
-        <Icon icon={X} size="sm"/>
+        <Icon icon={X} size="sm" />
       </button>
 
       <span className="project-image-manager__badge project-image-manager__badge--new">
@@ -116,7 +116,7 @@ export default function ProjectImageManager({
                 onClick={() => onExistingImageRemove(image)}
                 aria-label="Remove image"
               >
-                <Icon icon={X} size="sm"/>
+                <Icon icon={X} size="sm" />
               </button>
 
               <span className="project-image-manager__badge">Existing</span>

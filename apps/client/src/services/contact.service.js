@@ -1,7 +1,9 @@
 import { get, post, patch, remove } from "../api/request";
 
-export function getMessages() {
-  return get("/messages");
+export function getMessages(params = {}) {
+  return get("/messages", {
+    params,
+  });
 }
 
 export function getMessage(id) {

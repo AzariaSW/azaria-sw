@@ -7,10 +7,7 @@
 
   background: var(--color-surface);
 
-  border:
-    var(--border-width)
-    var(--border-style)
-    var(--border-color);
+  border: var(--border-width) var(--border-style) var(--border-color);
 
   border-radius: var(--radius-lg);
 }
@@ -89,10 +86,7 @@
 
   background: var(--color-surface-light);
 
-  border:
-    var(--border-width)
-    var(--border-style)
-    var(--border-color);
+  border: var(--border-width) var(--border-style) var(--border-color);
 
   border-radius: var(--radius-md);
 }
@@ -125,10 +119,7 @@
 
   background: var(--color-overlay);
 
-  border:
-    var(--border-width)
-    var(--border-style)
-    var(--color-border);
+  border: var(--border-width) var(--border-style) var(--color-border);
 
   border-radius: var(--radius-full);
 
@@ -151,9 +142,7 @@
   bottom: var(--space-2);
   left: var(--space-2);
 
-  padding:
-    var(--space-1)
-    var(--space-2);
+  padding: var(--space-1) var(--space-2);
 
   color: var(--color-text);
 
@@ -185,10 +174,7 @@
 
   background: var(--color-surface-light);
 
-  border:
-    var(--border-width)
-    dashed
-    var(--color-border);
+  border: var(--border-width) dashed var(--color-border);
 
   border-radius: var(--radius-md);
 
@@ -208,10 +194,7 @@
 
   background: transparent;
 
-  border:
-    var(--border-width)
-    var(--border-style)
-    var(--color-primary);
+  border: var(--border-width) var(--border-style) var(--color-primary);
 
   border-radius: var(--radius-md);
 

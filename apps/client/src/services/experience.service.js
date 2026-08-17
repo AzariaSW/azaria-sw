@@ -1,7 +1,9 @@
 import { get, put, post, remove } from "../api/request";
 
-export function getExperiences() {
-  return get("/experiences");
+export function getExperiences(params = {}) {
+  return get("/experiences",{
+    params,
+  });
 }
 
 export function getExperience(id) {

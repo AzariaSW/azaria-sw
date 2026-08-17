@@ -68,7 +68,7 @@ export default function AdminLogin({ challengeToken }) {
 
           {loginMutation.isError && (
             <p className="admin-login__error">
-                "Login failed. Please try again."
+              "Login failed. Please try again."
             </p>
           )}
 

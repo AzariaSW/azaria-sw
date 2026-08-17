@@ -1,8 +1,10 @@
 import { get, put, post, remove } from "../api/request";
 import toFormData from "../utils/formData";
 
-export function getProjects() {
-  return get("/projects");
+export function getProjects(params = {}) {
+  return get("/projects",{
+    params,
+  });
 }
 
 export function getProject(id) {

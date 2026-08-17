@@ -13,6 +13,9 @@
 
 .admin-profile__header h1 {
   margin: 0 0 var(--space-2);
+  color: var(--color-heading);
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
 }
 
 .admin-profile__header p {

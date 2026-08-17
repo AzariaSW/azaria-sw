@@ -82,7 +82,9 @@
 }
 
 .admin-sidebar__link {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   padding: var(--space-3);
   border-radius: var(--radius-md);
 
@@ -104,6 +106,18 @@
   color: var(--color-primary);
 }
 
+.admin-sidebar__unread-indicator {
+  width: var(--size-xxs);
+  height: var(--size-xxs);
+
+  flex: 0 0 auto;
+
+  border-radius: var(--radius-full);
+  background: var(--color-primary);
+  box-shadow: 0 0 6px var(--color-primary);
+  margin-left: var(--space-2);
+}
+
 .admin-sidebar__footer {
   margin-top: auto;
   padding-top: var(--space-5);
@@ -115,7 +129,7 @@
   padding: var(--space-3);
   border: 0;
   border-radius: var(--radius-md);
-  
+
   background: transparent;
   color: var(--color-danger);
   text-align: left;

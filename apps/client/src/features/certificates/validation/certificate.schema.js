@@ -13,7 +13,7 @@ const certificateSchema = z.object({
 
   issueDate: z.coerce.date("issue date is required"),
 
-  credentialUrl: z.url().optional(),
+  credentialUrl: z.string().url().or(z.literal("")).optional()
 });
 
 export default certificateSchema;

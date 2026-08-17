@@ -5,10 +5,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import useProfile from "../../profile/hooks/useProfile";
 import useUpdateProfile from "../../profile/hooks/useUpdateProfile";
 import profileSchema from "../../profile/validation/profile.schema";
-
 import { Button, Card, Input } from "../../../components/common";
-import { Spinner } from "../../../components/feedback";
-
+import { Spinner, Skeleton } from "../../../components/feedback";
 import "./AdminProfile.css";
 
 export default function AdminProfile() {
@@ -67,7 +65,7 @@ export default function AdminProfile() {
   if (isLoading) {
     return (
       <main className="admin-profile">
-        <Spinner />
+        <Skeleton />
       </main>
     );
   }
@@ -226,7 +224,7 @@ export default function AdminProfile() {
 
         <div className="admin-profile__actions">
           <Button type="submit" disabled={updateProfile.isPending}>
-            {updateProfile.isPending ? "Saving..." : "Save Changes"}
+            {updateProfile.isPending ? <Spinner /> : "Save Changes"}
           </Button>
         </div>
       </form>

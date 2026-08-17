@@ -2,12 +2,9 @@ import { useState } from "react";
 
 import useEducation from "../../../features/education/hooks/useEducation";
 import useDeleteEducation from "../../../features/education/hooks/useDeleteEducation";
-
 import { Button, Card } from "../../../components/common";
 import { Skeleton } from "../../../components/feedback";
-
 import EducationForm from "./components/EducationForm/EducationForm";
-
 import "./AdminEducation.css";
 
 export default function AdminEducation() {
@@ -17,11 +14,7 @@ export default function AdminEducation() {
 
   const LIMIT = 10;
 
-  const {
-    data,
-    isLoading,
-    isError,
-  } = useEducation({
+  const { data, isLoading, isError } = useEducation({
     page,
     limit: LIMIT,
   });
@@ -98,8 +91,7 @@ export default function AdminEducation() {
           <h1>Education</h1>
 
           <p>
-            Manage the education information displayed on your
-            public portfolio.
+            Manage the education information displayed on your public portfolio.
           </p>
         </div>
 
@@ -109,10 +101,7 @@ export default function AdminEducation() {
       </header>
 
       {isFormOpen && (
-        <EducationForm
-          education={editingEducation}
-          onClose={handleFormClose}
-        />
+        <EducationForm education={editingEducation} onClose={handleFormClose} />
       )}
 
       <section className="admin-education__list">
@@ -130,15 +119,11 @@ export default function AdminEducation() {
                   <h3>{education.degree}</h3>
 
                   {education.field && (
-                    <p className="admin-education__field">
-                      {education.field}
-                    </p>
+                    <p className="admin-education__field">{education.field}</p>
                   )}
 
                   <div className="admin-education__dates">
-                    <span>
-                      {formatDate(education.startDate)}
-                    </span>
+                    <span>{formatDate(education.startDate)}</span>
 
                     <span>—</span>
 

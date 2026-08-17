@@ -3,12 +3,9 @@ import { useState } from "react";
 import useSkills from "../../../features/skills/hooks/useSkills";
 import useSkillCategories from "../../../features/skills/hooks/useSkillCategories";
 import useDeleteSkill from "../../../features/skills/hooks/useDeleteSkill";
-
 import { Button, Card } from "../../../components/common";
 import { Skeleton } from "../../../components/feedback";
-
 import SkillForm from "./components/SkillForm/SkillForm";
-
 import "./AdminSkills.css";
 
 export default function AdminSkills() {

@@ -4,14 +4,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { X } from "../../../../../lib/icons";
 import Icon from "../../../../../lib/icons/Icon";
-
 import useCreateSkill from "../../../../skills/hooks/useCreateSkill";
 import useUpdateSkill from "../../../../skills/hooks/useUpdateSkill";
 import { Spinner } from "../../../../../components/feedback";
 import skillSchema from "../../../../skills/validation/skill.schema";
-
 import { Button, Card, Input } from "../../../../../components/common";
-
 import "./SkillForm.css";
 
 export default function SkillForm({ skill = null, onClose }) {
@@ -65,20 +62,14 @@ export default function SkillForm({ skill = null, onClose }) {
     });
   }
 
-  const isSubmitting =
-    createSkill.isPending || updateSkill.isPending;
+  const isSubmitting = createSkill.isPending || updateSkill.isPending;
 
   return (
     <Card className="skill-form">
-      <form
-        className="skill-form__form"
-        onSubmit={handleSubmit(onSubmit)}
-      >
+      <form className="skill-form__form" onSubmit={handleSubmit(onSubmit)}>
         <header className="skill-form__header">
           <div>
-            <h2>
-              {isEditing ? "Edit Skill" : "Add Skill"}
-            </h2>
+            <h2>{isEditing ? "Edit Skill" : "Add Skill"}</h2>
 
             <p>
               {isEditing
@@ -139,15 +130,14 @@ export default function SkillForm({ skill = null, onClose }) {
             Cancel
           </Button>
 
-          <Button
-            type="submit"
-            disabled={isSubmitting}
-          >
-            {isSubmitting
-              ? (<span> <Spinner/> "Saving..."</span>)
-              : isEditing
-                ? ("Save Changes")
-                : ("Add Skill")}
+          <Button type="submit" disabled={isSubmitting}>
+            {isSubmitting ? (
+              <Spinner />
+            ) : isEditing ? (
+              "Save Changes"
+            ) : (
+              "Add Skill"
+            )}
           </Button>
         </footer>
       </form>

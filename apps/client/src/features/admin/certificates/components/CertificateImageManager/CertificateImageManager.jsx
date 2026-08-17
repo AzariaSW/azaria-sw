@@ -3,8 +3,8 @@ import { useEffect, useRef, useState } from "react";
 import { X } from "../../../../../lib/icons";
 import Icon from "../../../../../lib/icons/Icon";
 import { getAsset } from "../../../../../utils/getAsset";
-
 import "./CertificateImageManager.css";
+
 export default function CertificateImageManager({
   existingImage,
   newImage,

@@ -2,7 +2,6 @@ import { useState } from "react";
 
 import useProjects from "../../../features/projects/hooks/useProjects";
 import useDeleteProject from "../../../features/projects/hooks/useDeleteProject";
-
 import { Button, Card } from "../../../components/common";
 import { Skeleton } from "../../../components/feedback";
 import ProjectForm from "./components/ProjectForm/ProjectForm";
@@ -82,10 +81,7 @@ export default function AdminProjects() {
       </header>
 
       {isFormOpen && (
-        <ProjectForm
-          project={editingProject}
-          onClose={handleFormClose}
-        />
+        <ProjectForm project={editingProject} onClose={handleFormClose} />
       )}
 
       <section className="admin-projects__list">
@@ -97,7 +93,7 @@ export default function AdminProjects() {
           projects.map((project) => (
             <Card key={project.id}>
               <article className="admin-projects__card">
-                <ImageCarousel images={project.images} alt={project.title}/>
+                <ImageCarousel images={project.images} alt={project.title} />
 
                 <div className="admin-projects__info">
                   <h2>{project.title}</h2>

@@ -1,7 +1,9 @@
 import { get, put, post, remove } from "../api/request";
 
-export function getSkills() {
-  return get("/skills");
+export function getSkills(params = {}) {
+  return get("/skills",{
+    params,
+  });
 }
 
 export function getSkill(id) {

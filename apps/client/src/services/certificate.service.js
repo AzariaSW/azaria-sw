@@ -1,8 +1,10 @@
 import { get, put, post, remove } from "../api/request";
 import toFormData from "../utils/formData";
 
-export function getCertificates() {
-  return get("/certificates");
+export function getCertificates(params = {}) {
+  return get("/certificates",{
+    params,
+  });
 }
 
 export function getCertificate(id) {

@@ -4,14 +4,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { X } from "../../../../../lib/icons";
 import Icon from "../../../../../lib/icons/Icon";
-
 import useCreateExperience from "../../../../experience/hooks/useCreateExperience";
 import useUpdateExperience from "../../../../experience/hooks/useUpdateExperience";
-
 import experienceSchema from "../../../../experience/validation/experience.schema";
-
+import { Spinner } from "../../../../../components/feedback";
 import { Button, Card, Input } from "../../../../../components/common";
-
 import "./ExperienceForm.css";
 
 export default function ExperienceForm({ experience = null, onClose }) {
@@ -164,11 +161,13 @@ export default function ExperienceForm({ experience = null, onClose }) {
           </Button>
 
           <Button type="submit" disabled={isSubmitting}>
-            {isSubmitting
-              ? "Saving..."
-              : isEditing
-                ? "Save Changes"
-                : "Add Experience"}
+            {isSubmitting ? (
+              <Spinner />
+            ) : isEditing ? (
+              "Save Changes"
+            ) : (
+              "Add Experience"
+            )}
           </Button>
         </footer>
       </form>

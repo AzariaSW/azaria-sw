@@ -9,7 +9,6 @@ import useUpdateProject from "../../../../projects/hooks/useUpdateProject";
 import projectSchema from "../../../../projects/validation/project.schema";
 import { Button, Card, Input } from "../../../../../components/common";
 import ProjectImageManager from "./ProjectImageManager";
-
 import "./ProjectForm.css";
 
 export default function ProjectForm({ project = null, onClose }) {
@@ -197,11 +196,13 @@ export default function ProjectForm({ project = null, onClose }) {
           </Button>
 
           <Button type="submit" disabled={isSubmitting}>
-            {isSubmitting
-              ? "Saving..."
-              : isEditing
-                ? "Save Changes"
-                : "Create Project"}
+            {isSubmitting ? (
+              <Spinner />
+            ) : isEditing ? (
+              "Save Changes"
+            ) : (
+              "Create Project"
+            )}
           </Button>
         </footer>
       </form>

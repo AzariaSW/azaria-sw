@@ -2,6 +2,7 @@ import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 import useAdminAuth from "../../../../features/admin/auth/context/useAdminAuth";
+import useMessage from "../../../../features/contact/hooks/useMessage";
 import "./AdminSidebar.css";
 
 const navigation = [
@@ -47,6 +48,13 @@ export default function AdminSidebar() {
   const { logout } = useAdminAuth();
   const navigate = useNavigate();
 
+  const { data: unreadMessages } = useMessage({
+    isRead: false,
+    limit: 1,
+  });
+
+  const hasUnreadMessages = (unreadMessages?.items?.length ?? 0) > 0;
+
   function Logout() {
     logout();
     navigate("/", {
@@ -73,13 +81,22 @@ export default function AdminSidebar() {
               }`
             }
           >
-            {item.label}
+            <span>{item.label}</span>
+
+            {item.label === "Messages" && hasUnreadMessages && (
+              <span
+                className="admin-sidebar__unread-indicator"
+                aria-label="Unread messages"
+              />
+            )}
           </NavLink>
         ))}
       </nav>
 
       <div className="admin-sidebar__footer">
-        <button type="button" onClick={Logout}>Logout</button>
+        <button type="button" onClick={Logout}>
+          Logout
+        </button>
       </div>
     </aside>
   );

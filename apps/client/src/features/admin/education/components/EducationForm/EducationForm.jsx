@@ -5,9 +5,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import useCreateEducation from "../../../../education/hooks/useCreateEducation";
 import useUpdateEducation from "../../../../education/hooks/useUpdateEducation";
 import educationSchema from "../../../../education/validation/education.schema";
-
+import { Spinner } from "../../../../../components/feedback";
 import { Button, Card, Input } from "../../../../../components/common";
-
 import "./EducationForm.css";
 
 export default function EducationForm({ education = null, onClose }) {
@@ -130,11 +129,13 @@ export default function EducationForm({ education = null, onClose }) {
           </Button>
 
           <Button type="submit" disabled={isSubmitting}>
-            {isSubmitting
-              ? "Saving..."
-              : isEditing
-                ? "Save Changes"
-                : "Add Education"}
+            {isSubmitting ? (
+              <Spinner />
+            ) : isEditing ? (
+              "Save Changes"
+            ) : (
+              "Add Education"
+            )}
           </Button>
         </footer>
       </form>

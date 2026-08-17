@@ -3,8 +3,8 @@ import { createContext, useState } from "react";
 export const AdminAuthContext = createContext(null);
 
 export function AdminAuthProvider({ children }) {
-  const [token, setToken] = useState(
-    () => sessionStorage.getItem("adminToken")
+  const [token, setToken] = useState(() =>
+    sessionStorage.getItem("adminToken"),
   );
 
   function login(newToken) {
