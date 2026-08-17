@@ -184,7 +184,7 @@
   --layout-max-width: 1440px;
 
   --layout-content-width: 760px;
-  
+
   --layout-padding: 2rem;
 
   /* Size */
@@ -202,7 +202,9 @@
 
   --size-xl: 3.5rem;
 
-  --size-xxl: 4.5rem
+  --size-xxl: 4.5rem;
+
+  --avatar-lg: 8rem;
 
   /*Icon Size*/
   --icon-xs: 0.75rem;

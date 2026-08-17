@@ -37,6 +37,7 @@ export {
   Info,
   Eye,
   EyeClosed,
+  MoveUpRight,
 } from "lucide-react";
 export {
   FaGithub as Github,
