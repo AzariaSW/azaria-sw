@@ -5,10 +5,11 @@ function Card({
   className = "",
   hover = false,
   padding = "md",
+  as: Component = "article",
   ...props
 }) {
   return (
-    <article
+    <Component
       className={[
         styles.card,
         styles[padding],
@@ -20,7 +21,7 @@ function Card({
       {...props}
     >
       {children}
-    </article>
+    </Component>
   );
 }
 

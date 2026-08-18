@@ -16,12 +16,14 @@
   justify-content: space-between;
   align-items: flex-start;
   gap: var(--space-4);
+  font-size: var(--font-size-xl);
   flex-wrap: wrap;
 }
 
 .education__header h4 {
   color: var(--color-primary);
   font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-md);
   margin-top: var(--space-1);
 }
 

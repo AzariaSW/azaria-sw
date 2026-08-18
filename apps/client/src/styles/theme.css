@@ -1,16 +1,3 @@
-/*
-  ==========================================
-  azaria-sw Design Tokens
-  
-  Rules:
-  
-  1. Do not hardcode reusable values in components.
-  2. Add reusable values here first.
-  3. Components consume tokens via var(...).
-  4. Media queries should only override tokens.
-  ==========================================
-*/
-
 :root {
   /* ========================Colors========================== */
   /* Background */
@@ -23,13 +10,15 @@
   /* Primary */
   --color-primary: #00ff88;
 
-  --color-primary-hover: #5bc997;
+  --color-primary-hover-text: #d4eee0;
+
+  --color-primary-hover: #00cc6a;
 
   --color-primary-dark: #00cc6a;
 
   /* Text */
   --color-text: #f0f6fc;
-
+  
   --color-text-muted: #8b949e;
 
   --color-heading: #ffffff;

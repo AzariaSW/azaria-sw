@@ -42,7 +42,11 @@ export default function Experience() {
         <div className="experience">
           {items.map((experience, index) => (
             <Reveal delay={index * 0.05}>
-              <div key={experience.id} className="experience__item">
+              <div
+                className={`experience__item ${
+                  index === items.length - 1 ? "experience__item--last" : ""
+                }`}
+              >
                 <div className="experience__timeline">
                   <span className="experience__dot" />
                 </div>

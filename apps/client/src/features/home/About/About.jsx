@@ -59,7 +59,7 @@ export default function About() {
 
               <p className="about__bio">
                 I enjoy learning modern technologies, improving my engineering
-                skills, and creating clean, maintainable systems that make a
+                skills, and creating clean, maintainable systems that makes a
                 positive impact.
               </p>
             </div>

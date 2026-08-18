@@ -1,5 +1,3 @@
-@import "../../../styles/theme.css";
-
 .admin-dashboard {
   width: 100%;
   max-width: var(--layout-max-width);

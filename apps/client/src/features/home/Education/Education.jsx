@@ -34,7 +34,7 @@ export default function Education() {
     <section id="education">
       <Section
         title="Education"
-        subtitle="My academic journey."
+        description="My academic journey."
       >
         <div className="education">
           {items.map((item, index) => (

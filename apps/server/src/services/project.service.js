@@ -54,7 +54,7 @@ export async function getAllProjects(query) {
 
     where,
 
-    allowedSortFields: ["title", "description", "createdAt", "updatedAt"],
+    allowedSortFields: ["title", "description", "createdAt", "updatedAt","featured"],
 
     defaultSort: [{ createdAt: "desc" }],
   });

@@ -221,7 +221,7 @@ Returns paginated projects including paths of the images they contains.
 
 | Parameter | Type    | Description                                       |
 | --------- | ------- | ------------------------------------------------- |
-| sort      | string  | `title`, `createdAt`,`description` or `updatedAt` |
+| sort      | string  | `title`, `createdAt`,`description`, `featured` or `updatedAt` |
 | featured  | boolean | Filter featured projects                          |
 
 ## GET /projects/:id
@@ -274,19 +274,21 @@ Authorization: Bearer <token>
 
 multipart/form-data
 
-| Field       | Type                      | Max Size  |
-| ----------- | ------------------------- | --------- |
-| title       | string                    | 100 char  |
-| description | string                    | 1000 char |
-| githubUrl   | String(url)               |           |
-| liveUrl     | String(url)               |           |
-| images      | file(jpg, jpeg,png, webp) | 10mb      |
-| images      | file(jpg, jpeg,png, webp) | 10mb      |
-| images      | file(jpg, jpeg,png, webp) | 10mb      |
-| images      | file(jpg, jpeg,png, webp) | 10mb      |
-| .           | .                         | .         |
-| .           | .                         | .         |
-| .           | .                         | .         |
+| Field         | Type                                                          | Max Size  |
+| ------------- | ------------------------------------------------------------- | --------- |
+| title         | string                                                        | 100 char  |
+| description   | string                                                        | 1000 char |
+| githubUrl     | String(url)                                                   |           |
+| liveUrl       | String(url)                                                   |           |
+| deletedImages | array of Strings(UUID)                                        | 10mb      |
+| imageOrder    | array of object({id: String(UUID), order: int(non negative)}) |           |
+| images        | file(jpg, jpeg,png, webp)                                     | 10mb      |
+| images        | file(jpg, jpeg,png, webp)                                     | 10mb      |
+| images        | file(jpg, jpeg,png, webp)                                     | 10mb      |
+| images        | file(jpg, jpeg,png, webp)                                     | 10mb      |
+| .             | .                                                             | .         |
+| .             | .                                                             | .         |
+| .             | .                                                             | .         |
 
 upto 20 images
 

@@ -1,14 +1,14 @@
-@import "../../../styles/theme.css";
-
 .projects {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  padding: var(--space-3) var(--space-5);
   gap: var(--space-8);
 }
 
 .project {
   display: flex;
   flex-direction: column;
+  height: 100%;
 
   transition:
     transform var(--transition-normal),
@@ -37,6 +37,7 @@
 
 .project__title {
   margin: 0;
+  font-size: var(--font-size-2xl);
 }
 
 .project__badge {

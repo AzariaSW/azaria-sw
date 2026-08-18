@@ -1,4 +1,6 @@
 import Hero from "../../features/home/Hero/Hero";
+import Icon from "../../lib/icons/Icon";
+import { Dot } from "../../lib/icons";
 import About from "../../features/home/About/About";
 import Skills from "../../features/home/Skills/Skills";
 import Experience from "../../features/home/Experience/Experience";
@@ -7,11 +9,16 @@ import Certificates from "../../features/home/Certificates/Certificates";
 import Education from "../../features/home/Education/Education";
 import Github from "../../features/home/Github/Github";
 import Contact from "../../features/home/Contact/Contact";
+import "./HomePage.css";
 
 function HomePage() {
   return (
     <>
       <Hero />
+
+      <div className="separator">
+        <span><Icon icon={Dot} size="xl"/></span>
+      </div>
 
       <About />
 

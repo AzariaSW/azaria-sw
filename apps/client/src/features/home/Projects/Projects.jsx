@@ -11,7 +11,14 @@ import {
 import "./Projects.css";
 
 export default function Projects() {
-  const { data: projects = [], isLoading, isError } = useProjects();
+  const {
+    data: projects = [],
+    isLoading,
+    isError,
+  } = useProjects({
+    sort: "featured",
+    order: "desc"
+  });
   const { items } = projects;
   if (isLoading) {
     return <Skeleton />;
@@ -39,7 +46,7 @@ export default function Projects() {
     <section id="projects">
       <Section
         title="Projects"
-        subtitle="A selection of projects I've built and contributed to."
+        description="A selection of projects I've built and contributed to."
       >
         <div className="projects">
           {items.map((project, index) => (
@@ -58,33 +65,30 @@ export default function Projects() {
                   <p className="project__description">{project.description}</p>
                 </div>
 
-                {(project.githubUrl || project.liveUrl) && (
-                  <div className="project__footer">
-                    {project.githubUrl && (
-                      <Button
-                        as="a"
-                        href={project.githubUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        variant="secondary"
-                      >
-                        GitHub
-                      </Button>
-                    )}
+                <div className="project__footer">
+                  {project.githubUrl && (
+                    <Button
+                      as="a"
+                      href={project.githubUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      variant="secondary"
+                    >
+                      GitHub
+                    </Button>
+                  )}
 
-                    {project.liveUrl && (
-                      <Button
-                        as="a"
-                        href={project.liveUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="project_button"
-                      >
-                        Live Demo
-                      </Button>
-                    )}
-                  </div>
-                )}
+                  {project.liveUrl && (
+                    <Button
+                      as="a"
+                      href={project.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Live Demo
+                    </Button>
+                  )}
+                </div>
               </Card>
             </Reveal>
           ))}

@@ -1,8 +1,7 @@
-@import "../../../styles/theme.css";
-
 .certificates {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  padding: var(--space-3) var(--space-5);
   gap: var(--space-8);
 }
 

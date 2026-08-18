@@ -1,5 +1,3 @@
-@import "../../../styles/theme.css";
-
 .skills {
   display: flex;
   flex-direction: column;
@@ -14,7 +12,7 @@
     border-color var(--transition-fast);
 }
 
-.skills__none{
+.skills__none {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -22,8 +20,7 @@
 }
 
 .skill:hover {
-  transform: translateY(-2px);
-  border-color: var(--color-primary);
+  transform: translateY(-3px);
 }
 
 .skills__group {
@@ -35,17 +32,21 @@
 
 .skills__group-title {
   margin: 0;
+  font-size: var(--font-size-xl);
   color: var(--color-heading);
 }
 
 .skills__list {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: var(--space-3);
 }
 
 .skill__name {
+  display: flex;
   font-weight: var(--font-weight-medium);
+  align-items: center;
+  justify-content: center;
 }
 
 @media (max-width: 640px) {

@@ -1,6 +1,7 @@
 import { ArrowRight, Download, Dot } from "../../../lib/icons";
 import Icon from "../../../lib/icons/Icon";
 import useProfile from "../../profile/hooks/useProfile";
+import HERO_STACK from "../../../constants/hero.js";
 import { Button, SocialLinks, Reveal } from "../../../components/common";
 import { Skeleton } from "../../../components/feedback";
 import { getAsset } from "../../../utils/getAsset";
@@ -128,18 +129,23 @@ export default function Hero() {
 
               <div className="hero__terminal">
                 <p className="hero__terminal-path">azaria@sw:~$</p>
-                <p>$ whoami</p>
-
-                <p>{fullName || "Azaria Abenet Fitta"}</p>
-
-                <p>$ stack</p>
-
                 <p>
-                  Node.js
-                  <Icon icon={Dot} size="lg" />
-                  React
-                  <Icon icon={Dot} size="lg" />
-                  PostgreSQL
+                  $ whoami
+                  <br />
+                  {fullName || "Azaria Abenet Fitta"}
+                </p>
+
+                <p className="hero__stack">
+                  <span>$ stack</span>
+                  <br />
+                  <span className="hero__stack-list">
+                    {HERO_STACK.map((technology, index) => (
+                      <span key={technology}>
+                        {index > 0 && <Icon icon={Dot} size="lg" />}
+                        {technology}
+                      </span>
+                    ))}
+                  </span>
                 </p>
               </div>
             </div>
