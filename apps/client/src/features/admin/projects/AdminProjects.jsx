@@ -2,10 +2,9 @@ import { useState } from "react";
 
 import useProjects from "../../../features/projects/hooks/useProjects";
 import useDeleteProject from "../../../features/projects/hooks/useDeleteProject";
-import { Button, Card } from "../../../components/common";
+import { Button, Card, ImageCarousel } from "../../../components/common";
 import { Skeleton } from "../../../components/feedback";
 import ProjectForm from "./components/ProjectForm/ProjectForm";
-import { ImageCarousel } from "../../../components/common";
 import "./AdminProjects.css";
 
 export default function AdminProjects() {
@@ -98,7 +97,7 @@ export default function AdminProjects() {
                 <div className="admin-projects__info">
                   <h2>{project.title}</h2>
 
-                  <p>{project.description}</p>
+                  <p className="admin-projects__description">{project.description}</p>
 
                   <div className="admin-projects__meta">
                     <span>{project.images?.length ?? 0} images</span>

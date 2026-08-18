@@ -57,7 +57,7 @@ export default function AdminProfile() {
   function onSubmit(data) {
     updateProfile.mutate(data, {
       onSuccess: () => {
-        reset({ profileImage: undefined, resume: undefined, cv: undefined });
+        reset({ profileImage: "", resume: "", cv: "" });
       },
     });
   }

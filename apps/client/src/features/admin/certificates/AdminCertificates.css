@@ -3,7 +3,6 @@
   max-width: var(--layout-max-width);
 
   margin: 0 auto;
-
   padding: var(--layout-padding);
 }
 
@@ -13,7 +12,6 @@
   justify-content: space-between;
 
   gap: var(--space-6);
-
   margin-bottom: var(--space-8);
 }
 
@@ -21,7 +19,6 @@
   margin: 0;
 
   color: var(--color-heading);
-
   font-size: var(--font-size-3xl);
   font-weight: var(--font-weight-bold);
 }
@@ -30,9 +27,7 @@
   margin: var(--space-2) 0 0;
 
   color: var(--color-text-muted);
-
   font-size: var(--font-size-md);
-
   line-height: 1.5;
 }
 
@@ -48,7 +43,6 @@
   align-items: center;
 
   gap: var(--space-6);
-
   padding: var(--space-6);
 }
 
@@ -76,7 +70,6 @@
   margin: 0;
 
   color: var(--color-heading);
-
   font-size: var(--font-size-xl);
   font-weight: var(--font-weight-semibold);
 }
@@ -85,29 +78,23 @@
   margin: var(--space-2) 0 0;
 
   color: var(--color-primary);
-
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-medium);
 }
 
 .admin-certificates__date {
   margin: var(--space-2) 0 0;
-
   color: var(--color-text-muted);
-
   font-size: var(--font-size-sm);
 }
 
 .admin-certificates__credential {
   display: inline-block;
-
   margin-top: var(--space-3);
-
+  
   color: var(--color-link);
-
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
-
   text-decoration: none;
 
   transition: color var(--transition-fast);
@@ -115,14 +102,12 @@
 
 .admin-certificates__credential:hover {
   color: var(--color-link-hover);
-
   text-decoration: underline;
 }
 
 .admin-certificates__actions {
   display: flex;
   flex-shrink: 0;
-
   gap: var(--space-3);
 }
 
@@ -132,7 +117,6 @@
   justify-content: center;
 
   gap: var(--space-4);
-
   margin-top: var(--space-8);
 }
 
@@ -140,9 +124,7 @@
   min-width: 100px;
 
   color: var(--color-text-muted);
-
   font-size: var(--font-size-sm);
-
   text-align: center;
 }
 

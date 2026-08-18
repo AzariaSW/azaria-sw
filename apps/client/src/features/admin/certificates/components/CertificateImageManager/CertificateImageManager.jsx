@@ -93,7 +93,7 @@ export default function CertificateImageManager({
         <div className="certificate-image-manager__preview">
           <div className="certificate-image-manager__item">
             <img
-              src={newImage ? preview : getAsset(existingImage.url)}
+              src={newImage ? preview : getAsset(existingImage)}
               alt={
                 newImage?.name || existingImage?.altText || "Certificate image"
               }
