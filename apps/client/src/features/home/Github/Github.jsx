@@ -33,24 +33,9 @@ export default function Github() {
 
   if (isError) {
     return (
-      <main className="github">
-        <section className="github__error">
-          <h1>GitHub</h1>
-
-          <p className="failed">Failed to load GitHub data.</p>
-
-          <Button
-            type="button"
-            onClick={() => {
-              profile.refetch();
-              repositories.refetch();
-              activity.refetch();
-            }}
-          >
-            Try Again
-          </Button>
-        </section>
-      </main>
+      <section id="github" className="failed">
+        Failed to load github.
+      </section>
     );
   }
 

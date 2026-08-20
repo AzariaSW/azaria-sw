@@ -7,7 +7,7 @@ import {
   ImageCarousel,
   Reveal,
 } from "../../../components/common";
-
+import ProjectDescription from "./components/ProjectDescription/ProjectDescription";
 import "./Projects.css";
 
 export default function Projects() {
@@ -17,7 +17,7 @@ export default function Projects() {
     isError,
   } = useProjects({
     sort: "featured",
-    order: "desc"
+    order: "desc",
   });
   const { items } = projects;
   if (isLoading) {
@@ -62,7 +62,7 @@ export default function Projects() {
                       <span className="project__badge">Featured</span>
                     )}
                   </div>
-                  <p className="project__description">{project.description}</p>
+                  <ProjectDescription description={project.description} />
                 </div>
 
                 <div className="project__footer">

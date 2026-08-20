@@ -4,16 +4,6 @@
   gap: var(--space-4);
 }
 
-.github__error {
-  padding: var(--space-5);
-
-  border: var(--border-width) var(--border-style) var(--color-danger);
-  border-radius: var(--radius-md);
-  background: var(--color-surface);
-  color: var(--color-danger);
-  font-size: var(--font-size-sm);
-}
-
 .github__stats {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
