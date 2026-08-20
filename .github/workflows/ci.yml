@@ -63,3 +63,31 @@ jobs:
           VITE_API_URL: http://localhost:5000/api/v1
           VITE_UPLOAD_URL: http://localhost:5000/uploads
           VITE_APP_NAME: Azaria SW
+
+  docker:
+    name: Production Docker Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build server image
+        run: |
+          docker build \
+            -f apps/server/Dockerfile \
+            -t azaria-sw-server:ci \
+            .
+
+      - name: Build client image
+        run: |
+          docker build \
+            -f apps/client/Dockerfile \
+            --build-arg VITE_API_URL=http://localhost:5000/api/v1 \
+            --build-arg VITE_UPLOAD_URL=http://localhost:5000/uploads \
+            --build-arg "VITE_APP_NAME=Azaria SW" \
+            -t azaria-sw-client:ci \
+            .
