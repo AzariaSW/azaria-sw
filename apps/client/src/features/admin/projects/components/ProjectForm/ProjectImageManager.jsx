@@ -1,21 +1,17 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useMemo } from "react";
 
 import { X } from "../../../../../lib/icons";
 import Icon from "../../../../../lib/icons/Icon";
 import { getAsset } from "../../../../../utils/getAsset";
 
 function NewImagePreview({ file, onRemove }) {
-  const [preview, setPreview] = useState(null);
+  const preview = useMemo(() => URL.createObjectURL(file), [file]);
 
   useEffect(() => {
-    const url = URL.createObjectURL(file);
-
-    setPreview(url);
-
     return () => {
-      URL.revokeObjectURL(url);
+      URL.revokeObjectURL(preview);
     };
-  }, [file]);
+  }, [preview]);
 
   return (
     <div className="project-image-manager__item">

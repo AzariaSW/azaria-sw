@@ -1,5 +1,5 @@
 const appConfig = Object.freeze({
-  portfolioName: "Azaria OS",
+  portfolioName: "Azaria SW",
 
   LIMIT: {
     Time: 15 * 60 * 1000,

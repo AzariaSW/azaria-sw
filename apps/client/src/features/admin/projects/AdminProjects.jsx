@@ -80,7 +80,11 @@ export default function AdminProjects() {
       </header>
 
       {isFormOpen && (
-        <ProjectForm project={editingProject} onClose={handleFormClose} />
+        <ProjectForm
+          key={editingProject?.id ?? "new"}
+          project={editingProject}
+          onClose={handleFormClose}
+        />
       )}
 
       <section className="admin-projects__list">
@@ -97,7 +101,9 @@ export default function AdminProjects() {
                 <div className="admin-projects__info">
                   <h2>{project.title}</h2>
 
-                  <p className="admin-projects__description">{project.description}</p>
+                  <p className="admin-projects__description">
+                    {project.description}
+                  </p>
 
                   <div className="admin-projects__meta">
                     <span>{project.images?.length ?? 0} images</span>

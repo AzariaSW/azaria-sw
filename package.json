@@ -1,7 +1,7 @@
 {
   "name": "azaria-sw",
   "version": "1.0.0",
-  "description": "AzariaOS - Backend focused developer portfolio",
+  "description": "AzariaSW - Backend focused developer portfolio",
   "private": true,
   "scripts": {
     "dev": "npm run dev --workspaces",

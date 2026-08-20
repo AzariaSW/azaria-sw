@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef } from "react";
 
 import { X } from "../../../../../lib/icons";
 import Icon from "../../../../../lib/icons/Icon";
@@ -13,27 +13,24 @@ export default function CertificateImageManager({
   error,
 }) {
   const MAX_FILE_SIZE = 10 * 1024 * 1024;
-
   const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
-
   const inputRef = useRef(null);
 
-  const [preview, setPreview] = useState(null);
-
-  useEffect(() => {
+  const preview = useMemo(() => {
     if (!newImage) {
-      setPreview(null);
-      return;
+      return null;
     }
 
-    const url = URL.createObjectURL(newImage);
-
-    setPreview(url);
-
-    return () => {
-      URL.revokeObjectURL(url);
-    };
+    return URL.createObjectURL(newImage);
   }, [newImage]);
+
+  useEffect(() => {
+    return () => {
+      if (preview) {
+        URL.revokeObjectURL(preview);
+      }
+    };
+  }, [preview]);
 
   function handleFileChange(event) {
     const file = event.target.files?.[0];

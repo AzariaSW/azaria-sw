@@ -1,4 +1,4 @@
-# AzariaOS
+# AzariaSW
 
 A backend-focused developer portfolio built as a production-style full-stack application.
 

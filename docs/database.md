@@ -1,4 +1,4 @@
-# AzariaOS Database
+# AzariaSW Database
 
 Database:
 PostgreSQL

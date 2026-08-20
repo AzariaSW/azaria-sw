@@ -1,6 +1,5 @@
-import { createContext, useState } from "react";
-
-export const AdminAuthContext = createContext(null);
+import { useState } from "react";
+import { AdminAuthContext } from "./AdminAuthContext";
 
 export function AdminAuthProvider({ children }) {
   const [token, setToken] = useState(() =>

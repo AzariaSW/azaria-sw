@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -27,7 +27,6 @@ export default function ProjectForm({ project = null, onClose }) {
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(projectSchema),
@@ -39,19 +38,6 @@ export default function ProjectForm({ project = null, onClose }) {
       liveUrl: project?.liveUrl ?? "",
     },
   });
-
-  useEffect(() => {
-    reset({
-      title: project?.title ?? "",
-      description: project?.description ?? "",
-      githubUrl: project?.githubUrl ?? "",
-      liveUrl: project?.liveUrl ?? "",
-    });
-
-    setExistingImages(project?.images ?? []);
-    setDeletedImages([]);
-    setNewImages([]);
-  }, [project, reset]);
 
   function handleExistingImageRemove(image) {
     setExistingImages((current) =>

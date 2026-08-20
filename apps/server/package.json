@@ -1,7 +1,7 @@
 {
   "name": "@azaria/server",
   "version": "1.0.0",
-  "description": "AzariaOS Express backend",
+  "description": "AzariaSW Express backend",
   "type": "module",
   "scripts": {
     "dev": "nodemon src/server.js",
