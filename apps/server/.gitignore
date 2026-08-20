@@ -2,9 +2,32 @@ node_modules
 
 .env
 uploads/*
-!uploads/.gitkeep
+
+!uploads/certificates/
+!uploads/cv/
+!uploads/profile/
+!uploads/projects/
+!uploads/resume/
+!uploads/temp/
+
+uploads/certificates/*
+!uploads/certificates/.gitkeep
+
+uploads/cv/*
+!uploads/cv/.gitkeep
+
+uploads/profile/*
+!uploads/profile/.gitkeep
+
+uploads/projects/*
+!uploads/projects/.gitkeep
+
+uploads/resume/*
+!uploads/resume/.gitkeep
+
+uploads/temp/*
+!uploads/temp/.gitkeep
 
 /src/generated/prisma
 /src/*/test.*
 /*/test.*
-backend.txt

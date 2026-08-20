@@ -1,6 +1,6 @@
 import { Navigate, useLocation } from "react-router-dom";
 
-import AdminLogin from "./auth/components/Adminlogin/AdminLogin";
+import AdminLogin from "./auth/components/AdminLogin/AdminLogin";
 
 export default function AdminEntry() {
   const location = useLocation();
