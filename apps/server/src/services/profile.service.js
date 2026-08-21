@@ -2,7 +2,7 @@ import prisma from "../prisma/client.js";
 
 import ApiError from "../utils/ApiError.js";
 import { HTTP_STATUS } from "../constants/httpStatus.js";
-import { validateUploadedFile, deleteFile } from "./file.service.js";
+import { validateUploadedFile, deleteFile, deleteUploadedFile } from "./file.service.js";
 import { UPLOAD } from "../config/upload.config.js";
 
 export async function getProfile() {
@@ -27,7 +27,7 @@ export async function updateProfile(data, files) {
   const profileImage = getUploadedFile(files, "profileImage");
   const resume = getUploadedFile(files, "resume");
   const cv = getUploadedFile(files, "cv");
-
+  let updated = false;
   try {
     if (profileImage) {
       await validateUploadedFile(profileImage, UPLOAD.IMAGE_TYPES);
@@ -54,17 +54,19 @@ export async function updateProfile(data, files) {
       data,
     });
 
+    updated = true;
+
     const uploadedFields = ["profileImage", "resumeUrl", "cvUrl"];
 
     for (const field of uploadedFields) {
       if (data[field] && current[field] && data[field] !== current[field]) {
-        await deleteFile(current[field]);
+        await deleteUploadedFile(current[field]);
       }
     }
 
     return update;
   } catch (error) {
-    if (files) {
+    if (!updated) {
       await deleteFile(profileImage?.path);
       await deleteFile(resume?.path);
       await deleteFile(cv?.path);

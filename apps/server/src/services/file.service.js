@@ -2,6 +2,8 @@ import fs from "fs/promises";
 import path from "path";
 import { fileTypeFromFile } from "file-type";
 
+import { UPLOAD } from "../config/upload.config.js";
+
 async function verifyFileType(filePath, allowedMimeTypes) {
   const type = await fileTypeFromFile(filePath);
 
@@ -43,6 +45,16 @@ export async function deleteFile(filePath) {
   }
 }
 
+export async function deleteUploadedFile(fileUrl) {
+  if (!fileUrl) {
+    return;
+  }
+
+  const relativePath = fileUrl.replace(/^\/+/, "");
+
+  await deleteFile(path.join(UPLOAD.BASE_DIRECTORY, relativePath));
+}
+
 export async function createDirectory(directory) {
   await fs.mkdir(directory, {
     recursive: true,
@@ -69,10 +81,14 @@ export async function deleteDirectory(directoryPath) {
   }
 
   try {
-    const absolutePath = path.resolve(
-      process.cwd(),
-      directoryPath.startsWith("/") ? directoryPath.slice(1) : directoryPath,
-    );
+    const absolutePath = path.isAbsolute(directoryPath)
+      ? directoryPath
+      : path.resolve(
+          process.cwd(),
+          directoryPath.startsWith("/")
+            ? directoryPath.slice(1)
+            : directoryPath,
+        );
 
     await fs.rm(absolutePath, {
       recursive: true,

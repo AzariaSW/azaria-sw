@@ -7,6 +7,7 @@ import { HTTP_STATUS } from "../constants/httpStatus.js";
 import {
   createDirectory,
   deleteFile,
+  deleteUploadedFile,
   moveFile,
   deleteDirectory,
 } from "./file.service.js";
@@ -230,7 +231,7 @@ export async function updateProject(data, projectId, files) {
     );
 
     for (const image of imagesToDelete) {
-      await deleteFile(image.url);
+      await deleteUploadedFile(image.url);
     }
 
     return project;

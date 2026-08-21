@@ -5,11 +5,10 @@ import ApiError from "../utils/ApiError.js";
 import { HTTP_STATUS } from "../constants/httpStatus.js";
 import { queryBuilder } from "./query.service.js";
 import {
-  createDirectory,
   validateUploadedFile,
   moveFile,
-  deleteDirectory,
   deleteFile,
+  deleteUploadedFile,
 } from "./file.service.js";
 import { UPLOAD } from "../config/upload.config.js";
 
@@ -95,7 +94,7 @@ export async function createCertificate(data, files) {
     return certificate;
   } catch (error) {
     if (moved) {
-      deleteFile(
+      await deleteFile(
         path.join(
           UPLOAD.BASE_DIRECTORY,
           UPLOAD.DESTINATIONS.CERTIFICATES,
@@ -111,6 +110,7 @@ export async function updateCertificate(data, certificateId, files) {
   const image = files?.["image"]?.[0] ?? null;
   let imagename;
   let moved;
+  let movedPath;
   try {
     if (image) {
       await validateUploadedFile(image, UPLOAD.IMAGE_TYPES);
@@ -122,16 +122,15 @@ export async function updateCertificate(data, certificateId, files) {
 
     if (data.image) {
       if (current.image) {
-        await deleteFile(current.image);
+        await deleteUploadedFile(current.image);
       }
-      moved = await moveFile(
-        image.path,
-        path.join(
-          UPLOAD.BASE_DIRECTORY,
-          UPLOAD.DESTINATIONS.CERTIFICATES,
-          imagename,
-        ),
+      movedPath = path.join(
+        UPLOAD.BASE_DIRECTORY,
+        UPLOAD.DESTINATIONS.CERTIFICATES,
+        imagename,
       );
+
+      moved = await moveFile(image.path, movedPath);
     }
 
     const update = await prisma.certificate.update({
@@ -147,7 +146,7 @@ export async function updateCertificate(data, certificateId, files) {
       throw new ApiError(HTTP_STATUS.NOT_FOUND, "Certificate not found");
     }
     if (moved) {
-      deleteFile(current.image);
+      deleteFile(movedPath);
     }
     throw error;
   }
@@ -158,14 +157,7 @@ export async function deleteCertificate(certificateId) {
     const certificate = await getCertificate(certificateId);
 
     if (certificate.image) {
-      const imagename = certificateId + path.extname(certificate.image);
-      deleteFile(
-        path.join(
-          UPLOAD.BASE_DIRECTORY,
-          UPLOAD.DESTINATIONS.CERTIFICATES,
-          imagename,
-        ),
-      );
+      await deleteUploadedFile(certificate.image);
     }
     return await prisma.certificate.delete({
       where: {

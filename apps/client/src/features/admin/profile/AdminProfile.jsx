@@ -18,6 +18,7 @@ export default function AdminProfile() {
     register,
     handleSubmit,
     reset,
+    resetField,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(profileSchema),
@@ -55,9 +56,18 @@ export default function AdminProfile() {
   }, [profile, reset]);
 
   function onSubmit(data) {
-    updateProfile.mutate(data, {
+    const profileData = {
+      ...data,
+      profileImage: data.profileImage?.[0],
+      resume: data.resume?.[0],
+      cv: data.cv?.[0],
+    };
+
+    updateProfile.mutate(profileData, {
       onSuccess: () => {
-        reset({ profileImage: "", resume: "", cv: "" });
+        resetField("profileImage");
+        resetField("resume");
+        resetField("cv");
       },
     });
   }
