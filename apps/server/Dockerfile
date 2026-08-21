@@ -16,8 +16,6 @@ RUN npx prisma generate --schema=apps/server/prisma/schema.prisma
 
 COPY apps/server/src ./apps/server/src
 
-COPY apps/server/uploads ./apps/server/uploads
-
 ENV NODE_ENV=production
 
 EXPOSE 5000
