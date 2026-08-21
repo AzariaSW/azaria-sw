@@ -18,7 +18,7 @@ export default function validate(schema) {
 
           "Validation failed",
 
-          result.error.errors,
+          result.error.issues,
         ),
       );
     }

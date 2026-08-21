@@ -12,20 +12,61 @@ if (process.env.GITHUB_TOKEN) {
 }
 
 export async function githubRequest(endpoint) {
-  const response = await fetch(
-    `https://api.github.com${endpoint}`,
+  const controller = new AbortController();
+  const timeout = setTimeout(() => {
+    controller.abort();
+  }, github.TIMEOUT);
 
-    {
-      headers,
-    },
-  );
+  try {
+    const response = await fetch(
+      `${github.API_URL}${endpoint}`,
 
-  if (!response.ok) {
+      {
+        headers,
+        signal: controller.signal,
+      },
+    );
+
+    if (!response.ok) {
+      if (response.status === 404) {
+        throw new ApiError(HTTP_STATUS.NOT_FOUND, "GitHub resource not found.");
+      }
+
+      if (response.status === 403 || response.status === 429) {
+        throw new ApiError(
+          HTTP_STATUS.TOO_MANY_REQUESTS,
+          "GitHub API rate limit exceeded.",
+        );
+      }
+
+      if (response.status >= 500) {
+        throw new ApiError(
+          HTTP_STATUS.SERVICE_UNAVAILABLE,
+          "GitHub service temporarily unavailable.",
+        );
+      }
+
+      throw new ApiError(HTTP_STATUS.BAD_REQUEST, "GitHub request failed.");
+    }
+
+    return response.json();
+  } catch (error) {
+    if (error instanceof ApiError) {
+      throw error;
+    }
+
+    if (error.name === "AbortError") {
+      throw new ApiError(
+        HTTP_STATUS.SERVICE_UNAVAILABLE,
+        "GitHub request timed out.",
+      );
+    }
+
     throw new ApiError(
       HTTP_STATUS.SERVICE_UNAVAILABLE,
-      "GitHub service temporarily unavailable.",
+      "Unable to connect to GitHub.",
     );
+  } finally {
+    clearTimeout(timeout);
   }
-
-  return response.json();
 }

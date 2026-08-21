@@ -174,7 +174,7 @@ export async function deleteCertificate(certificateId) {
     });
   } catch (error) {
     if (error.code === "P2025") {
-      throw new ApiError(HTTP_STATUS.NOT_FOUND, "Experience not found");
+      throw new ApiError(HTTP_STATUS.NOT_FOUND, "Certificate not found");
     }
 
     throw error;

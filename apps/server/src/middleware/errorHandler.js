@@ -22,7 +22,16 @@ export default function errorHandler(err, req, res, next) {
   const statusCode =
     err.statusCode || err.status || HTTP_STATUS.INTERNAL_SERVER_ERROR;
 
-  const message = err.success === false ? err.message : "Internal Server Error";
+  const isJsonSyntaxError =
+    err instanceof SyntaxError &&
+    err.status === HTTP_STATUS.BAD_REQUEST &&
+    "body" in err;
+
+  const message = isJsonSyntaxError
+    ? "Invalid JSON payload."
+    : err.success === false
+      ? err.message
+      : "Internal Server Error";
 
   res.status(statusCode).json({
     success: false,
