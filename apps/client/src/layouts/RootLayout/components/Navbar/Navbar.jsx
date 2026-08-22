@@ -1,7 +1,6 @@
 import { useRef } from "react";
 
 import Navigation from "./Navigation";
-import NavigationControls from "./NavigationControls";
 import "./Navbar.css";
 
 function Navbar({ onAdminTrigger }) {
@@ -39,7 +38,6 @@ function Navbar({ onAdminTrigger }) {
         </button>
 
         <Navigation />
-        <NavigationControls />
       </div>
     </header>
   );
