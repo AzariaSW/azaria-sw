@@ -23,7 +23,7 @@ async function main() {
       title: "Software Engineering Student | Backend Developer",
 
       bio: "Software Engineering student passionate about backend development, databases, and building practical software solutions.",
-      profileImage: "/public/images/Azaria-picture.jpg",
+      profileImage: null,
 
       github: "https://github.com/AzariaSW",
 
@@ -41,7 +41,7 @@ async function main() {
 
       location: "Addis Ababa, Ethiopia",
 
-      profileImage: "/public/images/Azaria-picture.jpg",
+      profileImage: null,
 
       github: "https://github.com/AzariaSW",
 
