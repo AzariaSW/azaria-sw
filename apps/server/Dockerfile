@@ -8,6 +8,8 @@ COPY apps/server/package.json ./apps/server/package.json
 
 COPY apps/client/package.json ./apps/client/package.json
 
+COPY apps/server/prisma.config.ts ./apps/server/prisma.config.ts
+
 RUN npm ci --workspace=@azaria/server
 
 COPY apps/server/prisma ./apps/server/prisma
