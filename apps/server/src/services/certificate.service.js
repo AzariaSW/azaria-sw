@@ -1,15 +1,10 @@
-import path from "path";
+import crypto from "crypto";
 import prisma from "../prisma/client.js";
 
 import ApiError from "../utils/ApiError.js";
 import { HTTP_STATUS } from "../constants/httpStatus.js";
 import { queryBuilder } from "./query.service.js";
-import {
-  validateUploadedFile,
-  moveFile,
-  deleteFile,
-  deleteUploadedFile,
-} from "./file.service.js";
+import { uploadFile, deleteCloudinaryFile } from "./cloudinary.service.js";
 import { UPLOAD } from "../config/upload.config.js";
 
 export async function getAllCertificates(query) {
@@ -27,7 +22,6 @@ export async function getAllCertificates(query) {
       {
         issuer: {
           contains: query.search,
-
           mode: "insensitive",
         },
       },
@@ -36,13 +30,9 @@ export async function getAllCertificates(query) {
 
   return queryBuilder({
     model: prisma.certificate,
-
     query,
-
     where,
-
     allowedSortFields: ["name", "issuer", "createdAt", "issueDate"],
-
     defaultSort: [{ name: "asc" }, { issueDate: "desc" }],
   });
 }
@@ -53,11 +43,7 @@ export async function getCertificate(id) {
   });
 
   if (!certificate) {
-    throw new ApiError(
-      HTTP_STATUS.NOT_FOUND,
-
-      "Certificate not found",
-    );
+    throw new ApiError(HTTP_STATUS.NOT_FOUND, "Certificate not found");
   }
 
   return certificate;
@@ -65,72 +51,74 @@ export async function getCertificate(id) {
 
 export async function createCertificate(data, files) {
   const image = files?.["image"]?.[0] ?? null;
-  let imagename;
-  let moved;
+
+  let uploadedFile = null;
+
   try {
     const certificateId = crypto.randomUUID();
 
     if (image) {
-      await validateUploadedFile(image, UPLOAD.IMAGE_TYPES);
-      imagename = certificateId + path.extname(image.filename);
-      data.image = `/${UPLOAD.DESTINATIONS.CERTIFICATES}/${imagename}`;
-      moved = await moveFile(
-        image.path,
-        path.join(
-          UPLOAD.BASE_DIRECTORY,
-          UPLOAD.DESTINATIONS.CERTIFICATES,
-          imagename,
-        ),
+      const publicId = `${certificateId}/${crypto.randomUUID()}`;
+
+      const result = await uploadFile(
+        image,
+        UPLOAD.DESTINATIONS.CERTIFICATES,
+        publicId,
       );
+
+      uploadedFile = {
+        publicId: result.public_id,
+        resourceType: result.resource_type,
+      };
+
+      data.image = result.secure_url;
+      data.publicId = result.public_id;
+      data.resourceType = result.resource_type;
     }
 
-    const certificate = await prisma.certificate.create({
+    return await prisma.certificate.create({
       data: {
         id: certificateId,
         ...data,
       },
     });
-
-    return certificate;
   } catch (error) {
-    if (moved) {
-      await deleteFile(
-        path.join(
-          UPLOAD.BASE_DIRECTORY,
-          UPLOAD.DESTINATIONS.CERTIFICATES,
-          imagename,
-        ),
+    if (uploadedFile) {
+      await deleteCloudinaryFile(
+        uploadedFile.publicId,
+        uploadedFile.resourceType,
       );
     }
+
     throw error;
   }
 }
 
 export async function updateCertificate(data, certificateId, files) {
   const image = files?.["image"]?.[0] ?? null;
-  let imagename;
-  let moved;
-  let movedPath;
-  try {
-    if (image) {
-      await validateUploadedFile(image, UPLOAD.IMAGE_TYPES);
-      imagename = certificateId + path.extname(image.filename);
-      data.image = `/${UPLOAD.DESTINATIONS.CERTIFICATES}/${imagename}`;
-    }
 
+  let uploadedFile = null;
+
+  try {
     const current = await getCertificate(certificateId);
 
-    if (data.image) {
-      if (current.image) {
-        await deleteUploadedFile(current.image);
-      }
-      movedPath = path.join(
-        UPLOAD.BASE_DIRECTORY,
+    if (image) {
+      const publicId = `${certificateId}/${crypto.randomUUID()}`;
+
+      const result = await uploadFile(
+        image,
         UPLOAD.DESTINATIONS.CERTIFICATES,
-        imagename,
+        publicId,
       );
 
-      moved = await moveFile(image.path, movedPath);
+      uploadedFile = {
+        publicId: result.public_id,
+        resourceType: result.resource_type,
+      };
+
+      data.image = result.secure_url;
+      data.publicId = result.public_id;
+      data.resourceType = result.resource_type;
     }
 
     const update = await prisma.certificate.update({
@@ -140,14 +128,25 @@ export async function updateCertificate(data, certificateId, files) {
       data,
     });
 
+    // Delete the old Cloudinary file only after the database
+    // update succeeds.
+    if (image && current.publicId) {
+      await deleteCloudinaryFile(current.publicId, current.resourceType);
+    }
+
     return update;
   } catch (error) {
     if (error.code === "P2025") {
       throw new ApiError(HTTP_STATUS.NOT_FOUND, "Certificate not found");
     }
-    if (moved) {
-      deleteFile(movedPath);
+
+    if (uploadedFile) {
+      await deleteCloudinaryFile(
+        uploadedFile.publicId,
+        uploadedFile.resourceType,
+      );
     }
+
     throw error;
   }
 }
@@ -156,14 +155,20 @@ export async function deleteCertificate(certificateId) {
   try {
     const certificate = await getCertificate(certificateId);
 
-    if (certificate.image) {
-      await deleteUploadedFile(certificate.image);
-    }
-    return await prisma.certificate.delete({
+    const deleted = await prisma.certificate.delete({
       where: {
         id: certificateId,
       },
     });
+
+    if (certificate.publicId) {
+      await deleteCloudinaryFile(
+        certificate.publicId,
+        certificate.resourceType,
+      );
+    }
+
+    return deleted;
   } catch (error) {
     if (error.code === "P2025") {
       throw new ApiError(HTTP_STATUS.NOT_FOUND, "Certificate not found");

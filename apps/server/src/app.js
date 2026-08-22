@@ -2,7 +2,6 @@ import express from "express";
 import compression from "compression";
 
 import { securityMiddleware, limiter } from "./middleware/security.js";
-import { UPLOAD } from "./config/upload.config.js";
 import requestId from "./middleware/requestId.js";
 import httpLogger from "./middleware/logger.js";
 import apiRoutes from "./routes/index.js";
@@ -37,8 +36,6 @@ app.use(
     limit: "100kb",
   }),
 );
-
-app.use("/uploads", express.static(UPLOAD.BASE_DIRECTORY));
 
 app.use("/api", apiRoutes);
 

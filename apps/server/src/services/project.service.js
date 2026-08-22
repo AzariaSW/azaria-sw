@@ -1,16 +1,14 @@
-import path from "path";
+import crypto from "crypto";
 import prisma from "../prisma/client.js";
 
 import { queryBuilder } from "./query.service.js";
 import ApiError from "../utils/ApiError.js";
 import { HTTP_STATUS } from "../constants/httpStatus.js";
 import {
-  createDirectory,
-  deleteFile,
-  deleteUploadedFile,
-  moveFile,
-  deleteDirectory,
-} from "./file.service.js";
+  uploadFile,
+  deleteCloudinaryFile,
+} from "./cloudinary.service.js";
+
 import { UPLOAD } from "../config/upload.config.js";
 
 const projectInclude = {
@@ -33,15 +31,12 @@ export async function getAllProjects(query) {
       {
         title: {
           contains: query.search,
-
           mode: "insensitive",
         },
       },
-
       {
         description: {
           contains: query.search,
-
           mode: "insensitive",
         },
       },
@@ -50,13 +45,15 @@ export async function getAllProjects(query) {
 
   return queryBuilder({
     model: prisma.project,
-
     query,
-
     where,
-
-    allowedSortFields: ["title", "description", "createdAt", "updatedAt","featured"],
-
+    allowedSortFields: [
+      "title",
+      "description",
+      "createdAt",
+      "updatedAt",
+      "featured",
+    ],
     defaultSort: [{ createdAt: "desc" }],
   });
 }
@@ -72,7 +69,6 @@ export async function getProject(id) {
   if (!project) {
     throw new ApiError(
       HTTP_STATUS.NOT_FOUND,
-
       "Project not found",
     );
   }
@@ -81,21 +77,33 @@ export async function getProject(id) {
 }
 
 export async function createProject(data, files) {
-  let projectDirectory;
+  const projectId = crypto.randomUUID();
+  const uploadedFiles = [];
 
   try {
-    const projectId = crypto.randomUUID();
+    const uploadedImages = [];
 
-    projectDirectory = path.join(
-      UPLOAD.BASE_DIRECTORY,
-      UPLOAD.DESTINATIONS.PROJECTS,
-      projectId,
-    );
+    for (const [index, file] of files.entries()) {
+      const publicId = `${projectId}-${crypto.randomUUID()}`;
 
-    await createDirectory(projectDirectory);
+      const result = await uploadFile(
+        file,
+        UPLOAD.DESTINATIONS.PROJECTS,
+        publicId,
+      );
 
-    for (const file of files) {
-      await moveFile(file.path, path.join(projectDirectory, file.filename));
+      uploadedFiles.push({
+        publicId: result.public_id,
+        resourceType: result.resource_type,
+      });
+
+      uploadedImages.push({
+        projectId,
+        url: result.secure_url,
+        publicId: result.public_id,
+        resourceType: result.resource_type,
+        order: index + 1,
+      });
     }
 
     return await prisma.$transaction(async (tx) => {
@@ -106,28 +114,25 @@ export async function createProject(data, files) {
         },
       });
 
-      if (files.length > 0) {
+      if (uploadedImages.length > 0) {
         await tx.projectImage.createMany({
-          data: files.map((file, index) => ({
-            projectId,
-            url: `/${UPLOAD.DESTINATIONS.PROJECTS}/${projectId}/${file.filename}`,
-            order: index + 1,
-          })),
+          data: uploadedImages,
         });
       }
 
       return tx.project.findUnique({
-        where: { id: projectId },
+        where: {
+          id: projectId,
+        },
         include: projectInclude,
       });
     });
   } catch (error) {
-    if (projectDirectory) {
-      await deleteDirectory(projectDirectory);
-    }
-
-    for (const file of files) {
-      await deleteFile(file.path);
+    for (const file of uploadedFiles) {
+      await deleteCloudinaryFile(
+        file.publicId,
+        file.resourceType,
+      );
     }
 
     throw error;
@@ -135,27 +140,39 @@ export async function createProject(data, files) {
 }
 
 export async function updateProject(data, projectId, files) {
-  const { deletedImages = [], imageOrder = [], ...projectData } = data;
+  const {
+    deletedImages = [],
+    imageOrder = [],
+    ...projectData
+  } = data;
 
-  let projectDirectory;
-  const movedFiles = [];
+  const uploadedFiles = [];
 
   try {
     const currentProject = await getProject(projectId);
 
-    projectDirectory = path.join(
-      UPLOAD.BASE_DIRECTORY,
-      UPLOAD.DESTINATIONS.PROJECTS,
-      projectId,
-    );
-    await createDirectory(projectDirectory);
+    const uploadedImages = [];
 
     for (const file of files) {
-      const destination = path.join(projectDirectory, file.filename);
+      const publicId = `${projectId}-${crypto.randomUUID()}`;
 
-      await moveFile(file.path, destination);
+      const result = await uploadFile(
+        file,
+        UPLOAD.DESTINATIONS.PROJECTS,
+        publicId,
+      );
 
-      movedFiles.push(destination);
+      uploadedFiles.push({
+        publicId: result.public_id,
+        resourceType: result.resource_type,
+      });
+
+      uploadedImages.push({
+        projectId,
+        url: result.secure_url,
+        publicId: result.public_id,
+        resourceType: result.resource_type,
+      });
     }
 
     const project = await prisma.$transaction(async (tx) => {
@@ -165,6 +182,7 @@ export async function updateProject(data, projectId, files) {
             id: {
               in: deletedImages,
             },
+            projectId,
           },
         });
       }
@@ -173,21 +191,19 @@ export async function updateProject(data, projectId, files) {
         where: {
           projectId,
         },
-
         orderBy: {
           order: "desc",
         },
       });
 
-      let nextOrder = lastImage ? lastImage.order + 1 : 1;
+      let nextOrder = lastImage
+        ? lastImage.order + 1
+        : 1;
 
-      if (files.length > 0) {
+      if (uploadedImages.length > 0) {
         await tx.projectImage.createMany({
-          data: files.map((file) => ({
-            projectId,
-
-            url: `/${UPLOAD.DESTINATIONS.PROJECTS}/${projectId}/${file.filename}`,
-
+          data: uploadedImages.map((image) => ({
+            ...image,
             order: nextOrder++,
           })),
         });
@@ -200,7 +216,6 @@ export async function updateProject(data, projectId, files) {
               where: {
                 id: image.id,
               },
-
               data: {
                 order: image.order,
               },
@@ -213,7 +228,6 @@ export async function updateProject(data, projectId, files) {
         where: {
           id: projectId,
         },
-
         data: projectData,
       });
 
@@ -221,7 +235,6 @@ export async function updateProject(data, projectId, files) {
         where: {
           id: projectId,
         },
-
         include: projectInclude,
       });
     });
@@ -231,19 +244,19 @@ export async function updateProject(data, projectId, files) {
     );
 
     for (const image of imagesToDelete) {
-      await deleteUploadedFile(image.url);
+      await deleteCloudinaryFile(
+        image.publicId,
+        image.resourceType,
+      );
     }
 
     return project;
   } catch (error) {
-    for (const file of movedFiles) {
-      await deleteFile(file);
-    }
-
-    for (const file of files) {
-      if (!movedFiles.includes(path.join(projectDirectory, file.filename))) {
-        await deleteFile(file.path);
-      }
+    for (const file of uploadedFiles) {
+      await deleteCloudinaryFile(
+        file.publicId,
+        file.resourceType,
+      );
     }
 
     throw error;
@@ -256,28 +269,38 @@ export async function deleteProject(projectId) {
       where: {
         id: projectId,
       },
-
       include: {
         images: true,
       },
     });
 
-    const projectDirectory = path.join(
-      UPLOAD.BASE_DIRECTORY,
-      UPLOAD.DESTINATIONS.PROJECTS,
-      projectId,
-    );
-    await deleteDirectory(projectDirectory);
+    if (!project) {
+      throw new ApiError(
+        HTTP_STATUS.NOT_FOUND,
+        "Project not found",
+      );
+    }
 
-    return prisma.project.delete({
+    for (const image of project.images) {
+      await deleteCloudinaryFile(
+        image.publicId,
+        image.resourceType,
+      );
+    }
+
+    return await prisma.project.delete({
       where: {
         id: projectId,
       },
     });
   } catch (error) {
     if (error.code === "P2025") {
-      throw new ApiError(HTTP_STATUS.NOT_FOUND, "Project not found");
+      throw new ApiError(
+        HTTP_STATUS.NOT_FOUND,
+        "Project not found",
+      );
     }
+
     throw error;
   }
 }

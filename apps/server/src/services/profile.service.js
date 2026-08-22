@@ -1,8 +1,9 @@
+import crypto from "crypto";
 import prisma from "../prisma/client.js";
 
 import ApiError from "../utils/ApiError.js";
 import { HTTP_STATUS } from "../constants/httpStatus.js";
-import { validateUploadedFile, deleteFile, deleteUploadedFile } from "./file.service.js";
+import { uploadFile, deleteCloudinaryFile } from "./cloudinary.service.js";
 import { UPLOAD } from "../config/upload.config.js";
 
 export async function getProfile() {
@@ -27,49 +28,98 @@ export async function updateProfile(data, files) {
   const profileImage = getUploadedFile(files, "profileImage");
   const resume = getUploadedFile(files, "resume");
   const cv = getUploadedFile(files, "cv");
-  let updated = false;
+
+  const uploadedFiles = [];
+
   try {
+    const current = await getProfile();
+
     if (profileImage) {
-      await validateUploadedFile(profileImage, UPLOAD.IMAGE_TYPES);
-      data.profileImage = `/${UPLOAD.DESTINATIONS.PROFILE}/${profileImage.filename}`;
+      const publicId = `main-profile/${crypto.randomUUID()}`;
+
+      const result = await uploadFile(
+        profileImage,
+        UPLOAD.DESTINATIONS.PROFILE,
+        publicId,
+      );
+
+      uploadedFiles.push({
+        publicId: result.public_id,
+        resourceType: result.resource_type,
+      });
+
+      data.profileImage = result.secure_url;
+      data.profileImagePublicId = result.public_id;
+      data.profileImageResourceType = result.resource_type;
     }
 
     if (resume) {
-      await validateUploadedFile(resume, UPLOAD.DOCUMENT_TYPES);
-      data.resumeUrl = `/${UPLOAD.DESTINATIONS.RESUME}/${resume.filename}`;
+      const publicId = `main-profile/${crypto.randomUUID()}`;
+
+      const result = await uploadFile(
+        resume,
+        UPLOAD.DESTINATIONS.RESUME,
+        publicId,
+      );
+
+      uploadedFiles.push({
+        publicId: result.public_id,
+        resourceType: result.resource_type,
+      });
+
+      data.resumeUrl = result.secure_url;
+      data.resumePublicId = result.public_id;
+      data.resumeResourceType = result.resource_type;
     }
 
     if (cv) {
-      await validateUploadedFile(cv, UPLOAD.DOCUMENT_TYPES);
-      data.cvUrl = `/${UPLOAD.DESTINATIONS.CV}/${cv.filename}`;
-    }
+      const publicId = `main-profile/${crypto.randomUUID()}`;
 
-    const current = await getProfile();
+      const result = await uploadFile(cv, UPLOAD.DESTINATIONS.CV, publicId);
+
+      uploadedFiles.push({
+        publicId: result.public_id,
+        resourceType: result.resource_type,
+      });
+
+      data.cvUrl = result.secure_url;
+      data.cvPublicId = result.public_id;
+      data.cvResourceType = result.resource_type;
+    }
 
     const update = await prisma.profile.update({
       where: {
         id: "main-profile",
       },
-
       data,
     });
 
-    updated = true;
+    if (profileImage && current.profileImagePublicId) {
+      await deleteCloudinaryFile(
+        current.profileImagePublicId,
+        current.profileImageResourceType,
+      );
+    }
 
-    const uploadedFields = ["profileImage", "resumeUrl", "cvUrl"];
+    if (resume && current.resumePublicId) {
+      await deleteCloudinaryFile(
+        current.resumePublicId,
+        current.resumeResourceType,
+      );
+    }
 
-    for (const field of uploadedFields) {
-      if (data[field] && current[field] && data[field] !== current[field]) {
-        await deleteUploadedFile(current[field]);
-      }
+    if (cv && current.cvPublicId) {
+      await deleteCloudinaryFile(current.cvPublicId, current.cvResourceType);
     }
 
     return update;
   } catch (error) {
-    if (!updated) {
-      await deleteFile(profileImage?.path);
-      await deleteFile(resume?.path);
-      await deleteFile(cv?.path);
+    for (const file of uploadedFiles) {
+      await deleteCloudinaryFile(file.publicId, file.resourceType);
+    }
+
+    if (error.code === "P2025") {
+      throw new ApiError(HTTP_STATUS.NOT_FOUND, "Profile not found");
     }
 
     throw error;

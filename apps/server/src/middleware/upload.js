@@ -1,7 +1,5 @@
 import multer from "multer";
-import fs from "fs";
 import path from "path";
-import crypto from "crypto";
 
 import ApiError from "../utils/ApiError.js";
 import parseJsonField from "../utils/parseJsonField.js";
@@ -9,52 +7,7 @@ import { HTTP_STATUS } from "../constants/httpStatus.js";
 
 import { UPLOAD } from "../config/upload.config.js";
 
-const storage = multer.diskStorage({
-  destination(req, file, cb) {
-    let folder;
-
-    switch (file.fieldname) {
-      case "profileImage":
-        folder = UPLOAD.DESTINATIONS.PROFILE;
-        break;
-
-      case "resume":
-        folder = UPLOAD.DESTINATIONS.RESUME;
-        break;
-
-      case "cv":
-        folder = UPLOAD.DESTINATIONS.CV;
-        break;
-
-      case "images":
-        folder = UPLOAD.DESTINATIONS.TEMP;
-        break;
-
-      case "image":
-        folder = UPLOAD.DESTINATIONS.CERTIFICATES;
-        break;
-
-      default:
-        return cb(
-          new ApiError(HTTP_STATUS.BAD_REQUEST, "Unexpected upload field."),
-        );
-    }
-
-    const destination = path.join(UPLOAD.BASE_DIRECTORY, folder);
-
-    fs.mkdirSync(destination, {
-      recursive: true,
-    });
-
-    cb(null, destination);
-  },
-
-  filename(req, file, cb) {
-    const extension = path.extname(file.originalname).toLowerCase();
-
-    cb(null, `${Date.now()}-${crypto.randomUUID()}${extension}`);
-  },
-});
+const storage = multer.memoryStorage();
 
 function fileFilter(req, file, cb) {
   let allowedTypes;
