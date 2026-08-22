@@ -237,16 +237,16 @@
   overflow: hidden;
 }
 
-._md_l1reh_47 {
-  width: 100%;
-}
-
 .admin-message-detail {
   display: flex;
   flex-direction: column;
 
   height: 100%;
   padding-top: var(--space-6);
+}
+
+.admin-messages__detail article {
+  width: 100%;
 }
 
 .admin-message-detail__back {
