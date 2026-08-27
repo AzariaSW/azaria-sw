@@ -91,3 +91,17 @@ jobs:
             --build-arg "VITE_APP_NAME=Azaria SW" \
             -t azaria-sw-client:ci \
             .
+  deploy:
+    needs:
+      - backend
+      - frontend
+      - docker
+
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+
+    steps:
+      - name: Deploy backend
+        run: curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK }}"
+
+      - name: Deploy frontend
+        run: curl -X POST "${{ secrets.VERCEL_DEPLOY_HOOK }}"
