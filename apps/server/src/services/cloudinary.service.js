@@ -1,6 +1,6 @@
 import path from "path";
-import { v2 as cloudinary } from "cloudinary";
 import { Readable } from "stream";
+import cloudinary from "../config/cloudinary.js";
 
 function bufferToStream(buffer) {
   return Readable.from([buffer]);

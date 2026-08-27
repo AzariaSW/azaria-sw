@@ -1,11 +1,7 @@
 import authConfig from "../config/auth.config.js";
-
 import { compare } from "../utils/hash.js";
-
 import { sign, verify } from "../utils/jwt.js";
-
 import ApiError from "../utils/ApiError.js";
-
 import { HTTP_STATUS } from "../constants/httpStatus.js";
 
 export async function verifySequence(sequence) {
