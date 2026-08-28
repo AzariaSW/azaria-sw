@@ -17,6 +17,11 @@ function getResourceType(mimetype) {
 export function uploadFile(file, destination, publicId) {
   return new Promise((resolve, reject) => {
     const resourceType = getResourceType(file.mimetype);
+    
+    const extension = path
+      .extname(file.originalname)
+      .toLowerCase()
+      .replace(".", "");
 
     const options = {
       resource_type: resourceType,
@@ -27,11 +32,8 @@ export function uploadFile(file, destination, publicId) {
       unique_filename: false,
     };
 
-    if (resourceType === "image") {
-      options.format = path
-        .extname(file.originalname)
-        .toLowerCase()
-        .replace(".", "");
+    if (extension) {
+      options.format = extension;
     }
 
     const stream = cloudinary.uploader.upload_stream(
@@ -50,10 +52,7 @@ export function uploadFile(file, destination, publicId) {
   });
 }
 
-export async function deleteCloudinaryFile(
-  publicId,
-  resourceType = "image",
-) {
+export async function deleteCloudinaryFile(publicId, resourceType = "image") {
   if (!publicId) {
     return;
   }
