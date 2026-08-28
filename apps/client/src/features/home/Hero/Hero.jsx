@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 
-import { ArrowRight, Download } from "../../../lib/icons";
+import { ArrowRight, Download, Dot } from "../../../lib/icons";
 import Icon from "../../../lib/icons/Icon";
 import useProfile from "../../profile/hooks/useProfile";
 import HERO_STACK from "../../../constants/hero.js";
@@ -129,24 +129,52 @@ export default function Hero() {
 
             <div className="hero__terminal">
               <p className="hero__terminal-path">azaria@sw:~$</p>
+
               <p>
-                $ whoami
+                <span className="hero__terminal-head">$ whoami</span>
                 <br />
                 {fullName || "Azaria Abenet Fitta"}
               </p>
 
               <p className="hero__stack">
-                <span>$ stack</span>
+                <span className="hero__terminal-head">$ stack</span>
                 <br />
                 <span className="hero__stack-list">
                   {HERO_STACK.map((technology, index) => (
                     <span key={technology}>
-                      {index > 0 && "|"}
+                      {index > 0 && <Icon icon={Dot} size="lg" />}
                       {technology}
                     </span>
                   ))}
                 </span>
               </p>
+            </div>
+
+            <div className="hero__card-social">
+              <SocialLinks
+                links={[
+                  {
+                    platform: "github",
+                    url: github,
+                  },
+                  {
+                    platform: "linkedin",
+                    url: linkedin,
+                  },
+                  {
+                    platform: "email",
+                    url: `mailto:${email}`,
+                  },
+                  {
+                    platform: "whatsapp",
+                    url: `https://wa.me/${phone}`,
+                  },
+                  {
+                    platform: "telegram",
+                    url: `https://t.me/${telegram}`,
+                  },
+                ]}
+              />
             </div>
           </div>
         </motion.div>
