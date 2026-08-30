@@ -1,8 +1,8 @@
-# Security
+# Azaria SW Security Documentation
 
-## Overview
+## 1. Overview
 
-The azaria-sw backend follows a layered security approach. Instead of relying on a single security mechanism, multiple independent protections are applied throughout the application to reduce attack surfaces and protect sensitive resources.
+The Azaria SW backend follows a layered security approach. Instead of relying on a single security mechanism, multiple independent protections are applied throughout the application to reduce attack surfaces and protect sensitive resources.
 
 The security implementation covers:
 
@@ -10,6 +10,7 @@ The security implementation covers:
 - CORS protection
 - Rate limiting
 - Hidden administrator interface
+- Hidden Administrative Challenge Trigger
 - Challenge-based administrator authentication
 - Password hashing
 - JWT authentication
@@ -21,9 +22,9 @@ The security implementation covers:
 - Database security
 - Containerized deployment
 
----
+Detailed API, database, and deployment behavior is documented separately.
 
-# Security Layers
+## 2. Security Layers
 
 ```
                 Client Request
@@ -58,9 +59,7 @@ The security implementation covers:
 
 Not every request requires authentication. Public portfolio resources remain accessible without an administrator token, while protected administrator operations require authentication.
 
----
-
-# HTTP Security
+## 3. HTTP Security
 
 Helmet is used to configure secure HTTP response headers.
 
@@ -79,17 +78,16 @@ Example:
 
 ```javascript
 helmet({
-    crossOriginResourcePolicy: {
-        policy: "cross-origin"
-    }
+  crossOriginResourcePolicy: {
+    policy: "cross-origin",
+  },
 });
 ```
 
 Helmet reduces browser-level attack surfaces but does not replace application-level authentication or input validation.
 
----
 
-# Cross-Origin Resource Sharing (CORS)
+## 4. Cross-Origin Resource Sharing (CORS)
 
 The API uses CORS to restrict which frontend origins may communicate with it.
 
@@ -99,16 +97,14 @@ Typical environments include:
 
 ```
 http://localhost:5173
-https://production-frontend.example
+https://azaria-sw.vercel.app
 ```
 
 An origin that is not included in the configured allowlist is rejected by the CORS middleware.
 
 CORS is a browser security mechanism. It does not replace authentication because non-browser clients can still send HTTP requests directly to the API.
 
----
-
-# Rate Limiting
+## 5. Rate Limiting
 
 The backend uses rate limiting to reduce brute-force attacks, excessive requests, and API abuse.
 
@@ -126,20 +122,16 @@ Example:
 
 ```json
 {
-    "success": false,
-    "message": "Too many requests. Please try again later."
+  "success": false,
+  "message": "Too many requests. Please try again later."
 }
 ```
 
 Rate limiting is an additional protection layer and should not be treated as the only defense against authentication attacks.
 
----
-
-# Hidden Administrator Interface
+## 6. Hidden Administrator Interface
 
 The administrator interface is intentionally not exposed as part of the normal public portfolio navigation.
-
-The frontend contains a hidden administrator entry mechanism.
 
 This reduces accidental discovery of the administration interface but is not considered authentication by itself.
 
@@ -147,9 +139,23 @@ The backend still protects administrator operations using authentication middlew
 
 The API authentication endpoints remain part of the backend route structure and must therefore be protected independently of whether the frontend exposes links to them.
 
----
+## 7. Hidden Administrative Challenge Trigger
 
-# Administrator Authentication
+The Hidden Administrative Challenge Trigger is a deliberately subtle interface used to activate the administrative authentication challenge.
+
+It is not presented as a conventional admin login button or publicly advertised control.
+
+Activating the trigger initiates the challenge flow required before administrative authentication can proceed.
+
+This adds an additional layer between the public portfolio interface and the administrative functionality.
+
+The trigger itself does not grant administrative access or authenticate the user.
+
+It only exposes the challenge mechanism, after which the normal authentication and authorization process takes place.
+
+This design helps keep administrative entry points unobtrusive while maintaining a clear separation from the public-facing portfolio.
+
+## 8. Administrator Authentication
 
 Administrator authentication uses a two-step process.
 
@@ -172,7 +178,7 @@ Administrator JWT
 Protected Admin Routes
 ```
 
-## Step 1 - Challenge
+### Step 1 - Challenge
 
 The client must successfully complete the administrator challenge.
 
@@ -180,7 +186,7 @@ A valid challenge produces a short-lived challenge JWT.
 
 The challenge token proves that the hidden authentication step has been completed.
 
-## Step 2 - Login
+### Step 2 - Login
 
 The administrator submits the configured username and password together with the valid challenge authorization.
 
@@ -188,7 +194,7 @@ Only a successful challenge allows the normal administrator login process to con
 
 A successful login produces an administrator JWT.
 
-## Important Security Boundary
+### Important Security Boundary
 
 The hidden frontend entry point and the challenge are defense-in-depth measures.
 
@@ -196,9 +202,7 @@ They do not replace the administrator password or JWT authentication.
 
 An attacker who discovers the backend authentication routes must still satisfy the challenge and valid administrator credentials.
 
----
-
-# Password Security
+## 9. Password Security
 
 Administrator passwords are never stored as plaintext passwords.
 
@@ -209,69 +213,34 @@ Verification is performed through bcrypt comparison rather than direct plaintext
 Example:
 
 ```javascript
-bcrypt.compare()
+bcrypt.compare();
 ```
 
 Only the required password or challenge hashes are stored in protected configuration.
 
 Secrets and hashes must not be committed to Git.
 
----
+## 10. JWT Authentication
 
-# JWT Authentication
+JWTs are used for administrator authentication.
 
-JWT is used for administrator authentication.
+Two logical token types exist:
 
-Two logical token types are used.
-
-## Challenge Token
-
-The challenge token is issued after successful challenge verification.
-
-Its purpose is to prove that the administrator challenge has been completed.
-
-It is short-lived and must be presented during the administrator login flow.
-
-Example payload structure:
-
-```json
-{
-    "type": "challenge",
-    "authorized": true
-}
-```
-
-The exact signing secret and expiration configuration are kept outside source control.
-
----
-
-## Administrator Token
-
-The administrator token is issued after successful administrator authentication.
-
-It is used to authorize protected administrator endpoints.
-
-Example payload structure:
-
-```json
-{
-    "role": "admin",
-    "username": "..."
-}
-```
+- Challenge token
+- Administrator token
 
 The server verifies:
 
+- Signature
 - Token validity
-- Token signature
-- Token expiration
-- Required administrator role
+- Expiration
+- Required administrator authorization
 
-Invalid or expired tokens are rejected before protected controller logic is executed.
+Invalid or expired tokens are rejected before protected business logic executes.
 
----
+Signing secrets and expiration settings remain outside source control.
 
-# Authentication Middleware
+### Authentication Middleware
 
 Protected routes use administrator authentication middleware.
 
@@ -288,9 +257,7 @@ The general flow is:
 
 Requests that fail authentication are rejected before protected business logic executes.
 
----
-
-# Request Validation
+## 12. Request Validation
 
 Incoming request data is validated before it reaches service or database operations.
 
@@ -314,9 +281,7 @@ Invalid input is rejected before normal business logic is executed.
 
 This reduces malformed input, unexpected application states, and database-level errors.
 
----
-
-# File Upload Security
+## 13. File Upload Security
 
 File uploads are validated before they are permanently stored.
 
@@ -336,9 +301,7 @@ Upload validation includes:
 - Storage location
 - Generated filenames
 
----
-
-# Allowed File Types
+### Allowed File Types
 
 Image uploads are restricted to supported image formats.
 
@@ -358,9 +321,7 @@ application/pdf
 
 Files outside the supported formats are rejected.
 
----
-
-# Extension Validation
+### Extension Validation
 
 File extensions are also checked independently from the declared MIME type.
 
@@ -385,11 +346,11 @@ image.php
 
 Checking both MIME information and the filename extension provides an additional validation layer.
 
----
-
-# File Size Limits
+### File Size Limits
 
 Upload size limits are enforced by the upload layer.
+
+The file size limits are `10MB`, which is also compatable with our cloudinary file storage.
 
 This prevents unnecessarily large files from consuming server resources or storage.
 
@@ -397,9 +358,7 @@ The frontend also provides matching validation for user experience, but server-s
 
 An uploaded file must pass the backend validation even if the frontend accepts it.
 
----
-
-# Random File Names
+### Random File Names
 
 Uploaded files are not stored using user-provided filenames.
 
@@ -422,59 +381,7 @@ Generated filenames help prevent:
 - Basic path manipulation through filenames
 - Accidental overwriting of existing files
 
----
-
-# Upload Directories
-
-Uploads are separated by resource type.
-
-Current storage structure is:
-
-```
-uploads/
-  profile/
-  resume/
-  cv/
-  certificates/
-  projects/
-  temp/
-```
-
-Project images are additionally separated into project-specific directories.
-
-Example:
-
-```
-uploads/
-  projects/
-    <project-id>/
-      <generated-file-name>
-```
-
-This keeps unrelated uploaded resources separated and makes cleanup easier.
-
----
-
-# Upload Persistence
-
-In the containerized production configuration, uploaded files are stored in a dedicated Docker volume.
-
-The server container uses a volume similar to:
-
-```yaml
-volumes:
-  - server-uploads:/app/apps/server/uploads
-```
-
-This prevents uploaded files from being lost when the server container is recreated.
-
-The upload volume is separate from the PostgreSQL data volume.
-
-Database backups do not automatically contain the uploaded files. Both database data and uploaded assets must therefore be protected separately.
-
----
-
-# Environment Variables
+## 14. Environment Variables
 
 Sensitive configuration is not committed to source control.
 
@@ -500,9 +407,7 @@ apps/client/.env.example
 
 Production secrets are supplied through the deployment environment.
 
----
-
-# Environment Separation
+### Environment Separation
 
 Development and production configuration are kept separate.
 
@@ -514,9 +419,7 @@ Public frontend configuration such as API URLs is not considered secret because 
 
 Secrets must never be placed in frontend environment variables.
 
----
-
-# Error Handling
+## 15. Error Handling
 
 A centralized error handler prevents unnecessary exposure of internal implementation details.
 
@@ -528,8 +431,8 @@ Example:
 
 ```json
 {
-    "success": false,
-    "message": "Internal Server Error"
+  "success": false,
+  "message": "Internal Server Error"
 }
 ```
 
@@ -543,9 +446,7 @@ This reduces information leakage about:
 - Application internals
 - Unexpected exceptions
 
----
-
-# Request Tracing
+## 16. Request Tracing
 
 Every request receives a unique Request ID.
 
@@ -568,9 +469,7 @@ Request logs can include:
 
 This makes security incidents and application failures easier to investigate.
 
----
-
-# Logging
+## 17. Logging
 
 The backend uses Morgan and Winston for request and application logging.
 
@@ -589,9 +488,7 @@ The logging system records information useful for diagnosing:
 
 Sensitive credentials and secrets should not be intentionally written to logs.
 
----
-
-# Database Security
+## 18. Database Security
 
 Database access is handled through Prisma Client.
 
@@ -608,9 +505,7 @@ Normal CRUD operations do not construct SQL statements by concatenating user inp
 
 This significantly reduces the risk of SQL injection through ordinary application queries.
 
----
-
-# Database Credentials
+### Database Credentials
 
 PostgreSQL credentials are supplied through environment configuration.
 
@@ -629,9 +524,7 @@ The server connects to PostgreSQL using the configured database connection strin
 
 Production credentials must remain outside Git.
 
----
-
-# Docker Security Considerations
+## 19. Docker Security Considerations
 
 The application is containerized using separate services for:
 
@@ -649,7 +542,7 @@ Container isolation reduces coupling between application services, but Docker it
 
 ---
 
-# CI Security
+## 20. CI Security
 
 The project uses GitHub Actions for continuous integration.
 
@@ -664,9 +557,7 @@ Current validation includes:
 
 Production secrets should not be added to CI unless a future workflow specifically requires them.
 
----
-
-# Git and Secret Protection
+## 21. Git and Secret Protection
 
 Sensitive environment files must remain ignored by Git.
 
@@ -682,9 +573,7 @@ and inspect staged files when environment or configuration files are modified.
 
 If a secret is accidentally committed, removing the file from the latest commit is not sufficient if the secret has already reached a remote repository. The exposed secret should be rotated.
 
----
-
-# Security Best Practices
+## 21. Security Best Practices
 
 The backend follows several secure development practices:
 
@@ -697,7 +586,6 @@ The backend follows several secure development practices:
 - Input validation is centralized
 - Uploads are validated
 - Upload filenames are generated
-- Upload directories are separated
 - SQL injection risk is reduced through Prisma
 - Global error handling is used
 - Request tracing is enabled
@@ -708,29 +596,7 @@ The backend follows several secure development practices:
 - Production uploads use a persistent volume
 - CI validates important application components
 
----
-
-# Security Limitations
-
-The current implementation provides multiple security layers but is not a complete security monitoring platform.
-
-The following are not currently treated as fully implemented security features:
-
-- Multi-factor authentication
-- Antivirus scanning for uploaded files
-- Centralized security monitoring
-- Automated intrusion detection
-- IP reputation blocking
-- Signed upload URLs
-- Dedicated audit logging
-- Refresh-token rotation
-- Full production deployment hardening
-
-These should be considered separately before production deployment.
-
----
-
-# Future Security Improvements
+## 22. Future Security Improvements
 
 Potential future enhancements include:
 
@@ -746,28 +612,3 @@ Potential future enhancements include:
 - Security headers review for the final domain
 - Dependency vulnerability management
 - Periodic security audits
-
----
-
-# Security Review Checklist
-
-Before production deployment, verify:
-
-- [ ] Production secrets are not committed
-- [ ] Production CORS origin is correct
-- [ ] HTTPS is enabled
-- [ ] JWT secrets are strong and unique
-- [ ] Administrator credentials are strong
-- [ ] Challenge secret is protected
-- [ ] Database credentials are protected
-- [ ] PostgreSQL is not publicly exposed unnecessarily
-- [ ] Upload volume is persistent
-- [ ] Database backups exist
-- [ ] Upload backups exist
-- [ ] Rate limiting is enabled
-- [ ] File size limits are configured
-- [ ] Allowed file types are restricted
-- [ ] Error responses do not expose internal details
-- [ ] CI passes before deployment
-- [ ] Production environment variables are configured separately
-- [ ] Docker images and dependencies are reviewed before deployment

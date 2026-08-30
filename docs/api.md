@@ -1,11 +1,11 @@
-# azaria-sw Backend API
+# Azaria SW Backend API
 
 # 1. Overview
 
 ## Base URL
 
 ```
-http://localhost:5000/api/v1
+https://<server-domain>/api/v1
 ```
 
 All API endpoints are relative to this base URL.
@@ -219,10 +219,10 @@ Returns paginated projects including paths of the images they contains.
 
 ### Unique Query Parameters
 
-| Parameter | Type    | Description                                       |
-| --------- | ------- | ------------------------------------------------- |
+| Parameter | Type    | Description                                                   |
+| --------- | ------- | ------------------------------------------------------------- |
 | sort      | string  | `title`, `createdAt`,`description`, `featured` or `updatedAt` |
-| featured  | boolean | Filter featured projects                          |
+| featured  | boolean | Filter featured projects                                      |
 
 ## GET /projects/:id
 
@@ -336,7 +336,7 @@ Authorization: Bearer <token>
   "name": "skill name (Max 100 characters)(REQUIRED)",
   "category": "category name (Max 100 characters)(REQUIRED)",
   "level": "3-30 character(Max 50 characters)(REQUIRED)",
-  "icon": "http://..."
+  "icon": "https://..."
 }
 ```
 
@@ -357,7 +357,7 @@ Authorization: Bearer <token>
   "name": "skill name (Max 100 character)",
   "category": "category name (Max 100 characters)",
   "level": "3-30 character(Max 50 characters)",
-  "icon": "http://..."
+  "icon": "https://..."
 }
 ```
 
@@ -671,40 +671,25 @@ Returns recent github activities.
 
 # 12. File Storage
 
-The API supports uploading and serving files for profile assets and project images.
+The API supports file uploads for profile assets, project images, and certificate images.
 
-Uploaded files are stored on the server filesystem and are publicly accessible through the `/uploads` route.
-
-Base URL:
-
-```
-http://localhost:5000/uploads
-```
+Files are stored in Cloudinary. The database stores the Cloudinary URL and asset metadata.
 
 ---
 
-## Directory Structure
+## Storage
 
-```
-uploads/
-├── profile/
-│   └── profile-image.jpg
-│
-├── resume/
-│   └── resume.pdf
-│
-├── cv/
-│   └── cv.pdf
-│
-└── projects/
-    ├── {projectId}/
-    │   ├── image1.jpg
-    │   ├── image2.png
-    │   └── ...
-    └── ...
+Cloudinary folders:
+
+```text
+profile/
+resume/
+cv/
+projects/
+certificates/
 ```
 
-Project images are grouped by their project ID.
+Project images use generated project-specific public IDs.
 
 ---
 
@@ -716,6 +701,7 @@ Used for:
 
 - Profile image
 - Project images
+- Certificate images
 
 Supported formats:
 
@@ -751,23 +737,21 @@ Invalid uploads are rejected before reaching the application.
 
 ---
 
-## Stored URLs
+## Stored Data
 
-Database records store relative URLs instead of absolute filesystem paths.
+For uploaded assets, the database stores the Cloudinary URL and, where applicable, the Cloudinary public ID and resource type.
 
 Example:
 
-```text
-/uploads/profile/profile.jpg
-
-/uploads/resume/resume.pdf
-
-/uploads/cv/cv.pdf
-
-/uploads/projects/3f2d9b2b/image1.jpg
+```json
+{
+  "id": "uuid",
+  "url": "https://res.cloudinary.com/...",
+  "publicId": "projects/project-id/generated-id",
+  "resourceType": "image",
+  "order": 1
+}
 ```
-
-These URLs can be used directly by the frontend to access uploaded resources.
 
 ---
 
@@ -813,7 +797,9 @@ Each image record contains:
 ```json
 {
   "id": "uuid",
-  "url": "/uploads/projects/{projectId}/image.jpg",
+  "url": "https://res.cloudinary.com/...",
+  "publicId": "projects/project-id/generated-id",
+  "resourceType": "image",
   "order": 1
 }
 ```
@@ -822,9 +808,14 @@ The `order` property determines the display sequence of images.
 
 ---
 
+## File Replacement and Deletion
+
+When an uploaded asset is replaced or deleted, the previous Cloudinary asset is removed.
+
+Deleting a project also removes its associated Cloudinary images.
+
+Database updates and file cleanup are handled by the corresponding service layer.
+
 ## Notes
 
-- Uploaded files are renamed using a generated UUID to prevent filename collisions.
-- Required upload directories are created automatically.
-- Deleting a project or replacing uploaded assets removes obsolete files from the server.
 - File uploads are validated before any database changes are committed.
