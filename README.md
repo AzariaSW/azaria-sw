@@ -2,6 +2,8 @@
 
 A full-stack personal portfolio website with a Linux-inspired interface, dynamic content, admin management, secure authentication, cloud file storage, and automated deployment.
 
+> **Note:** The backend is hosted on Render's free tier, which may suspend the service after inactivity. The first request after a period of inactivity can therefore take a few seconds while the service wakes up. **This is a hosting limitation, not an application performance issue**.
+
 ## Stack
 
 - Frontend: React, Vite, React Query
