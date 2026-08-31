@@ -34,7 +34,8 @@ function Navbar({ onAdminTrigger }) {
           className="navbar__brand"
           onClick={handleAdminTrigger}
         >
-          Azaria-SW
+          <img src="/AzariaSW.png" alt="AzariaSW" />
+          <span>Azaria-SW</span>
         </button>
 
         <Navigation />

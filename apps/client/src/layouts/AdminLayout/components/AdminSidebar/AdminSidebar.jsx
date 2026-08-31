@@ -64,7 +64,10 @@ export default function AdminSidebar() {
   return (
     <aside className="admin-sidebar">
       <div className="admin-sidebar__brand">
-        <span>Azaria-SW</span>
+        <div className="admin-sidebar__brand-main">
+          <img src="/AzariaSW.png" alt="AzariaSW" />
+          <span>Azaria-SW</span>
+        </div>
         <small>Admin</small>
       </div>
 
