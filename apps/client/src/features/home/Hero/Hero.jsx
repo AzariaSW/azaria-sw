@@ -142,7 +142,7 @@ export default function Hero() {
                 <span className="hero__stack-list">
                   {HERO_STACK.map((technology, index) => (
                     <span key={technology}>
-                      {index > 0 && <Icon icon={Dot} size="lg" />}
+                      {index > 0 && "| "}
                       {technology}
                     </span>
                   ))}

@@ -1,6 +1,8 @@
 const HERO_STACK = [
   "Java",
+  "JavaScript",
   "Express.js",
+  "React",
   "PostgreSQL",
 ];
 
